@@ -32,7 +32,8 @@ Internet of things measurements
 4.	Go to [http://localhost:9000/admin](http://localhost:9000/admin).
 
 5.	Endpoints.
-		GET		/								Seek life elsewhere
+
+		GET		/										Seek life elsewhere
 		GET		/locations.xls							Excel export of results
 		GET		/locations.json							Lists all locations
 		GET		/locations/{slug}.json					Shows a single location
