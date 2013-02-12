@@ -34,11 +34,12 @@ Internet of things measurements
 5.	Endpoints.
 
 		GET		/locations.xls							Excel export of results
-		GET		/locations								Lists all locations
-		GET		/locations/{slug}						Shows a single location
+		GET		/locations.json							Lists all locations
+		GET		/locations/{slug}.json					Shows a single location
 
-		GET		/locations/{slug}/measurements			Shows all measurements for a location
-		POST	/locations/{slug}/measurements			Creates a new measurement for a location
+		GET		/locations/{slug}/measurements.json		Shows all measurements for a location
+		POST	/locations/{slug}/measurements.json		Creates and returns a new measurement for a 
+														location
 
 		GET		/admin									Admin area
 		

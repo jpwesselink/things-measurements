@@ -41,6 +41,7 @@ public class Locations extends Controller {
 	}
 
 	public static void xls() throws IOException, WriteException {
+		response.contentType = "application/vnd.ms-excel";
 		final String dateFormatString = "yyyy-MM-dd HH:mm:ss";
 		DateFormat customDateFormat = new DateFormat(dateFormatString);
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormatString);

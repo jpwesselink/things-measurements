@@ -4,12 +4,13 @@
 
 # Home page
 
-GET		/locations.xls							Locations.xls
-GET		/locations								Locations.index
-GET		/locations/{slug}						Locations.show
+GET		/											Application.index
+GET		/locations.xls								Locations.xls
+GET		/locations.json								Locations.index
+GET		/locations/{slug}.json						Locations.show
 
-GET		/locations/{slug}/measurements			LocationMeasurements.index
-POST	/locations/{slug}/measurements			LocationMeasurements.create
+GET		/locations/{slug}/measurements.json			LocationMeasurements.index
+POST	/locations/{slug}/measurements.json			LocationMeasurements.create
 
 
 # Ignore favicon requests
