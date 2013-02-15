@@ -18,12 +18,22 @@ public class LocationMeasurements extends Controller {
 		measurement.location = location;
 		measurement.value = params.get("value", Integer.class);
 		measurement.save();
-		renderJSON(Serializers.measurementDeepSerializer.serialize(measurement));
+		if(request.format.equals("json")){
+			renderJSON(Serializers.measurementDeepSerializer.serialize(measurement));
+			
+		} else if (request.format.equals("txt")){
+			renderText(location.getTotalsMap());
+		}
 	}
 
 	public static void index(String slug) {
 		Location location = Location.find("bySlug", slug).first();
 		notFoundIfNull(location);
-		renderJSON(Serializers.measurementSerializer.serialize(location.measurements));
+		
+		if(request.format.equals("json")){
+			renderJSON(Serializers.measurementSerializer.serialize(location.measurements));
+		} else if (request.format.equals("txt")){
+			renderText(location.getTotalsMap());
+		}
 	}
 }

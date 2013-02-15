@@ -12,15 +12,18 @@ GET		/locations.xls								Locations.xls
 GET		/locations.json								Locations.index
 GET		/locations/{slug}.json						Locations.show
 
-GET		/locations/{slug}/measurements.json			LocationMeasurements.index
-POST	/locations/{slug}/measurements.json			LocationMeasurements.create
+GET		/locations/{slug}/measurements.json			LocationMeasurements.index(format:'json')
+GET		/locations/{slug}/measurements.txt			LocationMeasurements.index(format:'txt')
+
+POST	/locations/{slug}/measurements.json			LocationMeasurements.create(format:'json')
+POST	/locations/{slug}/measurements.txt			LocationMeasurements.create(format:'txt')
 
 
 # Ignore favicon requests
-GET     /favicon.ico                            404
+GET     /favicon.ico                            	404
 
 # Map static resources from the /app/public folder to the /public path
-GET     /public/                                staticDir:public
+GET     /public/                                	staticDir:public
 
 
-*      /admin              module:crud
+*      	/admin              						module:crud

@@ -18,7 +18,7 @@ public class Measurement extends Model {
 	public Integer value;
 	
 	public String toString(){
-		return value != null ? value.toString() : "null [" + id.toString() + "]";
+		return location.slug + " " + (value != null ? value.toString() : "null [" + id.toString() + "]");
 	}
 	
 	@PrePersist
