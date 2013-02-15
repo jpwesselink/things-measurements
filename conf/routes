@@ -5,6 +5,9 @@
 # Home page
 
 GET		/											Application.index
+GET		/stemmen-met-je-donder						Application.show
+POST	/stemmen-met-je-donder						Application.vote
+
 GET		/locations.xls								Locations.xls
 GET		/locations.json								Locations.index
 GET		/locations/{slug}.json						Locations.show

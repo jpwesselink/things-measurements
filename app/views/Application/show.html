@@ -1,0 +1,44 @@
+#{extends 'main.html'/}
+<style>
+	a {
+		font-size: 60px;
+		text-decoration: none;
+		color: black;
+	}
+</style>
+<center >
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	
+<div style="font-size: 80px; width: 400px;">
+		<center>
+			
+#{form action: @Application.vote(), id:'f'}
+<input name="value" type="hidden" id="h"></div>
+	<a href="#" onclick="$('#h').val(1); $('#f').submit();">: ) Feeling good</a>
+<hr style="width: 400px;"/>
+	<a href="#" onclick="$('#h').val(2); $('#f').submit();"> : | I'm alright</a>
+<hr style="width: 400px;"/>
+	<a href="#" onclick="$('#h').val(3); $('#f').submit();"> : / Not so well</a>
+<hr style="width: 400px;"/>
+	<a href="#" onclick="$('#h').val(4); $('#f').submit();"> : ( Terrible</a>
+#{/form}
+#{if yourVote}
+<h2 style="font-size: 50px;">Je gevoel was </h2>
+<h1 style="font-size: 30px;">
+	
+	#{if yourVote == '1'}: )#{/if}
+	#{if yourVote == '2'}: |#{/if}
+	#{if yourVote == '3'}: /#{/if}
+	#{if yourVote == '4'}: (#{/if}
+	
+</h1>
+#{/if}
+		</center>
+
+	
+</div>
+</center>

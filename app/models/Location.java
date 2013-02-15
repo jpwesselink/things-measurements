@@ -36,12 +36,6 @@ public class Location extends Model {
 		return name != null ? name : id.toString();
 	}
 
-	public HashMap<String, String> getFoo() {
-		HashMap<String, String> totals = new HashMap<String, String>();
-		totals.put("foo", "bar");
-		return totals;
-	}
-
 	public Map<Integer, Integer> getTotalsMap() {
 		Map<Integer, Integer> totals = new HashMap<Integer, Integer>();
 		for (Measurement m : measurements) {

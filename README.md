@@ -33,6 +33,7 @@ Internet of things measurements
 
 5.	Endpoints.
 
+		GET		/										Seek life elsewhere
 		GET		/locations.xls							Excel export of results
 		GET		/locations.json							Lists all locations
 		GET		/locations/{slug}.json					Shows a single location
