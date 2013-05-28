@@ -1,44 +1,113 @@
 #{extends 'main.html'/}
-<style>
-	a {
-		font-size: 60px;
-		text-decoration: none;
-		color: black;
-	}
-</style>
-<center >
-	<br/>
-	<br/>
-	<br/>
-	<br/>
-	<br/>
-	
-<div style="font-size: 80px; width: 400px;">
-		<center>
-			
-#{form action: @Application.vote(), id:'f'}
-<input name="value" type="hidden" id="h"></div>
-	<a href="#" onclick="$('#h').val(1); $('#f').submit();">: ) Feeling good</a>
-<hr style="width: 400px;"/>
-	<a href="#" onclick="$('#h').val(2); $('#f').submit();"> : | I'm alright</a>
-<hr style="width: 400px;"/>
-	<a href="#" onclick="$('#h').val(3); $('#f').submit();"> : / Not so well</a>
-<hr style="width: 400px;"/>
-	<a href="#" onclick="$('#h').val(4); $('#f').submit();"> : ( Terrible</a>
-#{/form}
-#{if yourVote}
-<h2 style="font-size: 50px;">Je gevoel was </h2>
-<h1 style="font-size: 30px;">
-	
-	#{if yourVote == '1'}: )#{/if}
-	#{if yourVote == '2'}: |#{/if}
-	#{if yourVote == '3'}: /#{/if}
-	#{if yourVote == '4'}: (#{/if}
-	
-</h1>
-#{/if}
-		</center>
+#{set 'moreScripts'}
+<script src="@{'/public/javascripts/jquery.geolocation.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+<script type="text/javascript">
+	$(function() {
+		$.geolocation.get({
+			success : function(geoLocation) {
+				$("#lat").val(geoLocation.coords.latitude);
+				$("#lng").val(geoLocation.coords.longitude);
+			},
+			error : function() {
 
-	
+			}
+		});
+		IOT = {
+			vote : function (v){
+				$.ajax({
+					url: #{jsAction @Application.vote(':value', ':lng', ':lat') /},
+						type : "PUT",
+						dataType: 'json',
+						success : function(data){
+							
+						}, 
+						error : function(){
+							
+						}
+				});
+			}
+		};
+	}); 
+</script>
+#{/}
+
+#{if yourVote != null}
+%{
+	def m = [
+		0: 'devastated',
+		1: 'general-sadness',
+		2: 'pretty-happy',
+		3: 'happiness-bordering-to-incontinence'
+	]
+}%
+<div class="container">
+	<div class="row">
+		<div class="span12">
+			<div class="thumbnail giant smiley">
+				<div class="well">
+					<center>
+						<a href="#" class="go-big-red ${m.get(yourVote)?:''}-empty"></a>
+					</center>
+				</div>
+				
+			</div>
+			
+		</div>
+	</div>
+#{/if}
+#{else}
+
+
+<div class="container">
+	<div class="row">
+		<div class="span12">
+			<div class="hero-unit">
+				<h1>&{'how_do_you_feel'}</h1>
+				<p>
+					&{'choose_one'}
+				</p>
+				<br/>
+				<div class="container-fluid">
+					<div class="row-fluid">
+						<div class="span3">
+							<center>
+								<a href="#" onclick="IOT.vote(0);" class="go-big-red devastated"></a>
+							</center>
+						</div>
+						<div class="span3">
+							<center>
+								<a href="#" onclick="$('#h').val(1); $('#f').submit();" class="go-big-red general-sadness"></a>
+							</center>
+						</div>
+						<div class="span3">
+							<center>
+								<a href="#" onclick="$('#h').val(2); $('#f').submit();" class="go-big-red pretty-happy"></a>
+							</center>
+						</div>
+						<div class="span3">
+							<center>
+
+								<a href="#" onclick="$('#h').val(3); $('#f').submit();" class="go-big-red happiness-bordering-to-incontinence"></a>
+							</center>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
 </div>
-</center>
+2
+#{form action: @Application.vote(), id:'f'}
+<input name="value" type="hidden" id="h">
+</div>
+<input name="lng" type="hidden" id="lng">
+</div>
+<input name="lat" type="hidden" id="lat">
+</div>
+
+#{/form}
+#{/else}
+

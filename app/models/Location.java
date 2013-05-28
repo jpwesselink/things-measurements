@@ -10,6 +10,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import play.db.jpa.Model;
 import play.templates.JavaExtensions;
 
@@ -20,8 +23,12 @@ public class Location extends Model {
 	public String slug;
 
 	@OneToMany(mappedBy = "location")
+	@Cascade({CascadeType.DELETE})
 	public List<Measurement> measurements = new ArrayList<Measurement>();
 
+	public double lat;
+	public double lng;
+	// 52.070498,4.3007
 	public int getNumberOfMeasurements() {
 		return measurements.size();
 	}

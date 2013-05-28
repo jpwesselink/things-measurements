@@ -3,15 +3,27 @@
 # ~~~~
 
 # Home page
+GET		/scripts/requireConfig.js					RequireJS.config
+GET		/scripts/IOT.js								RequireJS.IOT
+GET		/scripts/main.js							RequireJS.main
 
+*      	/                							module:secure
+GET		/test										Application.test
+WS     	/socket                  					MeasurementsFeed.FeedSocket.join   
 GET		/											Application.index
-GET		/stemmen-met-je-donder						Application.show
-POST	/stemmen-met-je-donder						Application.vote
+GET		/stemmen									Application.show
+POST	/stemmen									Application.vote
+GET		/bedankt									Application.thanks
+GET		/nuke										Application.nuke
 
 GET		/locations.xls								Locations.xls
 GET		/locations.json								Locations.index
 GET		/locations/{slug}.json						Locations.show
 
+GET		/measurements/percentages.json				Measurements.percentages
+DELETE	/measurements								Measurements.delete
+
+DELETE	/locations/{slug}/measurements				LocationMeasurements.delete
 GET		/locations/{slug}/measurements.json			LocationMeasurements.index(format:'json')
 GET		/locations/{slug}/measurements.txt			LocationMeasurements.index(format:'txt')
 
@@ -23,7 +35,15 @@ POST	/locations/{slug}/measurements.txt			LocationMeasurements.create(format:'tx
 GET     /favicon.ico                            	404
 
 # Map static resources from the /app/public folder to the /public path
-GET     /public/                                	staticDir:public
-
+GET		/images/									staticDir:public/images
+GET     /scripts/                               	staticDir:public/scripts
+GET     /javascripts/                               staticDir:public/javascripts
+GET     /stylesheets/                               staticDir:public/stylesheets
+GET		/less/										staticDir:public/bootstrap-3.0.0/less
+GET		/font/										staticDir:public/bootstrap-3.0.0/font
+GET		/img/										staticDir:public/bootstrap-3.0.0/img
+GET		/js/										staticDir:public/bootstrap-3.0.0/docs/assets/js
+GET		/ico/										staticDir:public/bootstrap-3.0.0/ico
 
 *      	/admin              						module:crud
+DELETE	/crudmeasurements							CRUDMeasurements.deleteAll

@@ -4,3 +4,11 @@ require:
     - play
     - play -> crud
     - play -> maven head
+    - play -> secure
+    - less -> less 0.9.2
+repositories:
+    - my modules:
+        type:       local
+        artifact:   ${application.path}/local-modules/[module]-[revision].zip
+        contains:
+            - less -> *

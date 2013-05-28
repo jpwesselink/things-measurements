@@ -9,7 +9,6 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
 import flexjson.BasicType;
-import flexjson.JSONContext;
 import flexjson.TypeContext;
 import flexjson.transformer.AbstractTransformer;
 

@@ -1,0 +1,34 @@
+#{extends 'CRUD/layout.html' /}
+#{i18n/}
+#{set title:messages.get('crud.list.title', type.name) /}
+<div id="crudList" class="${type.name}">
+	<p class="crudDelete">
+        <input type="submit" value="&{'crud.delete_measurements', type.modelName}"  onclick=" if(confirm(i18n('crud.delete_all_measurements_confirm'))){document.forms[0].submit()}; return false;" style="right: 130px"/>
+    </p>
+    #{form @CRUDMeasurements.deleteAll()}
+     <input type="hidden" name="redirect" value="${"GET".equals(request.method) ? request.url : Play.ctxPath + "/"}">
+    #{/form}
+
+    <h2 id="crudListTitle">&{'crud.list.title', type.name}</h2>
+
+    <div id="crudListSearch">
+        #{crud.search /}
+    </div>
+
+    <div id="crudListTable">
+        #{crud.table fields:['createdAt', '_info', 'value']}
+        	#{crud.custom '_info'}
+        	${object}
+        	#{/}
+        #{/}
+    </div>
+
+    <div id="crudListPagination">
+        #{crud.pagination /}
+    </div>
+
+    <p id="crudListAdd">
+        <a href="@{blank()}">&{'crud.add', type.modelName}</a>
+    </p>
+
+</div>

@@ -1,0 +1,159 @@
+
+.snazzy-rotation(@degrees){
+	-webkit-transform:rotate(@degrees);
+			transform:rotate(@degrees);
+			-moz-transform:rotate(@degrees);
+}
+.snazzy-button(@niceColor){
+	text-align: center;
+		width: 140px;
+		height: 140px;
+		color: #fff;
+		font-family: @sansFontFamily;
+		font-size: 40px;
+		text-transform: uppercase;
+		text-shadow: darken(@niceColor, 20%) 0 0px 5px;
+		display: inline-block;
+		line-height: 140px;
+		border-radius: 70px;
+		box-shadow: inset rgba(255,255,255,.8) 0 2px 4px;
+		background: linear-gradient(top, rgba(180,9,9,1) 0%,rgba(111,9,9,1) 100%);
+		background-clip: padding-box;
+		transform: rotate(-12deg);
+		background-size: 100% auto;
+		box-shadow: rgba(0,0,0,.5) 0px 0px 4px;
+		span {
+			font-weight: bold;
+		}
+		text-decoration: none;
+		&.giant {
+			width: 400px;
+			height: 400px;
+			line-height: 400px;
+		}
+		
+		
+		&.small {
+			width: 100px;
+			height: 100px;
+			line-height: 100px;
+		}
+		
+		&.very-small {
+			width: 50px;
+			height: 50px;
+			line-height: 50px;
+		}
+}
+.snazzy-button-active(@niceColor){
+	box-shadow: rgba(255,255,255,1) 0 0 20px, rgba(255,255,255,1) 0 0 30px , inset rgba(0,0,0,.5) 0px 0px 14px;
+	background: linear-gradient(top, darken(@niceColor, 20%) 0%, lighten(@niceColor, 20%) 100%);
+	background-clip: padding-box;
+}
+
+.percentage(@textColor){
+	
+}
+
+.go-big-red {
+	span {
+		display: block;
+	}
+	
+	&:link, &:visited {
+		.snazzy-button(@red);
+	}
+	
+	&:hover {
+		box-shadow: rgba(255,255,255,1) 0 0 20px, rgba(255,255,255,1) 0 0 30px, inset rgba(255,255,255,.8) 0 2px 4px;
+		transform: rotate(0deg);
+		transition: transform 0.3s ease-out;
+	}
+	
+	
+	
+	&.devastated {
+		background-image: url(/public/images/red-devastated.png);
+		&:active {
+			.snazzy-button-active(@red);
+		}
+	}
+		
+	&.devastated-empty {
+		background-image: url(/public/images/red-devastated.png);
+		.percentage(@white);
+	}
+	
+	&.general-sadness {
+		.snazzy-button(@blue);
+		background-image: url(/public/images/blue-unhappy.png);
+		&:active {
+			.snazzy-button-active(@blue);
+		}
+	}
+	
+	&.general-sadness-empty {
+		background-image: url(/public/images/blue-unhappy.png);
+		.percentage(@white);
+		
+	}
+	
+	&.pretty-happy {
+		.snazzy-button(@green);
+		background-image: url(/public/images/green-content.png);
+		&:active {
+			.snazzy-button-active(@green);
+		}
+	}
+	
+	&.pretty-happy-empty {
+		background-image: url(/public/images/green-content.png);
+		.percentage(@black);
+	}
+	
+	&.happiness-bordering-to-incontinence {
+		.snazzy-button(@yellow);
+		background-image: url(/public/images/yellow-happy.png);
+		&:active {
+			.snazzy-button-active(@yellow);
+		}
+	}
+	
+	&.happiness-bordering-to-incontinence-empty {
+		background-image: url(/public/images/yellow-happy.png);
+		.percentage(@black);
+	}
+}
+
+.smiley {
+	.caption {
+		text-align: center;
+		h1 {
+			font-size: 50px;
+		}
+	}	
+}
+
+.how-do-you-feel {
+	color: @gray;
+	font-size: 32px;
+	line-height: 42px;
+}
+@media (max-width: 767px) {
+	.smiley {
+		.well {
+			.pull-left();
+			margin-bottom: 0;	
+			margin-right: 20px;
+		}
+		.caption {
+			.clearfix();
+			padding-bottom: 0;
+			text-align: left;
+			h1 {
+				line-height: 100px;
+				font-size: 60px;
+			}
+		}
+	}	
+}

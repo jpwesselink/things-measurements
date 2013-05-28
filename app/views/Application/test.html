@@ -1,0 +1,113 @@
+#{extends 'main.html'/}
+<script type="text/javascript" src="@{'/public/scripts/require.js'}"></script>
+<script type="text/javascript" src="@{RequireJS.config()}"></script>
+<script type="text/javascript" src="@{RequireJS.main()}"></script>
+#{i18n/}
+<script type="text/xhtml" id="infoboxTemplate">
+		<!-- 
+	
+	<div class="progress" style="height: 50px">
+		<div data-bind="text: $data.name">123</div>
+		<div data-bind="text: $data.title">123</div>
+		<div class="progress-bar progress-bar-danger" style="width: <%= percentages[0] %>%"></div>
+		<div class="progress-bar progress-bar-info" style="width: <%= percentages[1] %>%"></div>
+		<div class="progress-bar progress-bar-warning" style="width: <%= percentages[2] %>%"></div>
+		<div class="progress-bar progress-bar-success" style="width: <%= percentages[3] %>%"></div>
+	</div>
+		-->
+</script>
+<script type="text/xhtml" id="locationTemplate">
+<div class="span3">
+	<div class="thumbnail" data-bind="click: function(){ var marker = $root.markerCache.get($data.slug)(); if(marker){ $root.map.setZoom(17);$root.map.panTo(marker.position);$root.map.setCenter(marker.position);}}">
+		<h3><%= $data.name %></h3>
+		<dl class="dl-horizontal">
+        <% _.each($data.percentages, function (percentage, key){ %>
+			<dt><%= i18n('description.sentiment.' + key) %></dt>
+            <dd><%= Math.round(percentage * 100)/100  %></dd>
+		<% }); %>
+		</dl>
+		<div class="img-thumbnail">
+			<div data-bind="peity : { valueMap: $data.percentages, config : { diameter: 40, colours : ['#ff0613', '#0090ff', '#00ff71', '#ffff00']  }}"></div>
+		</div>
+		<div class="progress">
+		<% _.each(['danger', 'info', 'success', 'warning'], function(subClass, index){ %>
+			<div class="progress-bar progress-bar-<%=subClass%>" style="width: <%= $data.percentages[index] %>%"></div>
+		<% }); %>
+		</div>
+	</div>
+	<br/>
+</div>
+</script>
+%{
+def m = [
+0: 'devastated',
+1: 'general-sadness',
+2: 'pretty-happy',
+3: 'happiness-bordering-to-incontinence'
+]
+}%
+<div class="container">
+	<div class="row">
+		<div class="span12">
+			<h1>&{'general-mood'}</h1>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<div class="row">
+		#{list items: 0..3, as: 'key'}
+		#{if key >=0 && key <=3}
+		<div class="span3">
+			<div class="thumbnail smiley">
+				<div class="well">
+					<center>
+						<div data-bind="click : function(){this.vote(${key})}" class="go-big-red small ${m.get(key)?:''}"></div>
+					</center>
+				</div>
+				<div class="caption">
+					<h3 data-bind="text: '&{'description.sentiment.'+key}'"></h3>
+					<h4 data-bind="text: percentages.get(${key})"></h4>
+				</div>
+			</div>
+			<br/>
+		</div>
+		#{/if}
+		#{/list}
+	</div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="span12">
+			<h1>&{'mood-locations'}</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<div class="thumbnail">
+				<div class="map">
+					<div id="map-canvas" style="height: 100%; width: 100%;"></div>
+				</div>
+				<div data-bind="foreach: markers.values()">
+					<div data-bind="mapMarker : { map: $root.map, markerClusterer: $root.markerClusterer, location: $data }">
+						
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<div class="row" data-bind="template : { name : 'locationTemplate', foreach: locations.values()}">
+		
+	</div>
+</div>
+#{form action: @Application.vote(), id:'f'}
+<input name="value" type="hidden" id="h">
+</div>
+<input name="lng" type="hidden" id="lng">
+</div>
+<input name="lat" type="hidden" id="lat">
+</div>
+
+#{/form}
+
+
