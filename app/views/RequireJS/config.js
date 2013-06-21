@@ -2,6 +2,8 @@ requirejs.config({
     baseUrl: "/scripts",
     paths : {
         "jquery" : "jquery-1.8.1",
+        "waypoints" : "jquery/waypoints",
+        "waypoints-sticky" : "jquery/waypoints-sticky",
         "jquery.geolocation" : "jquery/jquery.geolocation",
         "jquery.peity" : "jquery/jquery.peity",
         "ko.observableDictionary" : "ko/ko.observableDictionary",
@@ -42,6 +44,12 @@ requirejs.config({
         },
         "ko.bindingHandlers.mapMarker" : {
             deps : ["knockout", "google-maps-v3"]
+        },
+        "waypoints" : {
+        	deps: ["jquery"]
+        },
+        "waypoints-sticky" : {
+        	deps: ["waypoints"]
         },
         "jquery.geolocation" : {
             deps: ["jquery"],

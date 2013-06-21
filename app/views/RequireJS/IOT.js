@@ -1,4 +1,4 @@
-define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox", "markerclusterer", "bootstrap"], function($, ko, _, MarkerLabel, InfoBox, MarkerClusterer){
+define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox", "markerclusterer", "bootstrap", "waypoints-sticky"], function($, ko, _, MarkerLabel, InfoBox, MarkerClusterer){
     var IOT;
     
     IOT = {
@@ -59,6 +59,7 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             this.createMarkers();
             this.initMap();
             this.parseLocations();
+            this.initWaypoints();
             ko.applyBindings(this.viewModel);
             this.determineGeo();
             if(!this.initSocket()){
@@ -66,6 +67,9 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             }
         },
         
+        initWaypoints: function(){
+        	
+        },
         prepareTemplates : function () {
             this.templates.infoBox = _.template($("#infoboxTemplate").html());  
         },
