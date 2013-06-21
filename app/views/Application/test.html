@@ -62,7 +62,7 @@
 		<!-- 
 			map 
 		-->
-		<div class="span9 map-span">
+		<div class="span10 map-span">
 			<div class="map">
 				<div id="map-canvas" style="height: 100%; width: 100%;"></div>
 			</div>
@@ -75,9 +75,11 @@
 		<!-- 
 			votes 
 		-->
-		<div class="span3 votes-span">
+		<div class="span2 votes-span">
 			<div class="votes" data-bind="foreach: { data: moods, as: 'mood'}">
-				<div class="vote" data-bind="css : 'mood-' + mood"></div>
+				<div class="vote" data-bind="css : 'mood-' + mood">
+					<i class="icon icon-huge" data-bind="css : 'icon-mood-'+mood, click : function(){ $root.vote($index())}"></i>
+				</div>
 			</div>
 		</div>
 	</div>
