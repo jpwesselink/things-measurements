@@ -122,7 +122,7 @@ requirejs.config({
             deps : ["jquery"]
         },
         "IOT" : {
-            deps : ["domready", "jquery", "knockout", "ko.observableDictionary", "ko.underscoreTemplateEngine",  "ko.bindingHandlers.mapMarker", "ko.bindingHandlers.peity", "markerwithlabel", "markerclusterer", "infobox", "jquery.geolocation"]
+            deps : ["domReady", "jquery", "knockout", "ko.observableDictionary", "ko.underscoreTemplateEngine",  "ko.bindingHandlers.mapMarker", "ko.bindingHandlers.peity", "markerwithlabel", "markerclusterer", "infobox", "jquery.geolocation"]
         }
     }
 }); 
