@@ -29,6 +29,8 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             value : ko.observable(),
             votedAt : ko.observable(),
             percentages : ko.observableDictionary({0:0,1:0,2:0,3:0}),
+            moods : ko.observableArray(['devastated', 'general-sadness', 'pretty-happy', 'happiness-bordering-to-incontinence']),
+            types : ko.observableArray(['danger', 'info', 'success', 'warning']),
             vote : function (value){
                 IOT.vote(value);
             },

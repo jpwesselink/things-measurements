@@ -1,5 +1,4 @@
 
-
 .snazzy-rotation(@degrees){
 	-webkit-transform:rotate(@degrees);
 			transform:rotate(@degrees);
@@ -46,10 +45,53 @@
 			line-height: 50px;
 		}
 }
+
 .snazzy-button-active(@niceColor){
 	box-shadow: rgba(255,255,255,1) 0 0 20px, rgba(255,255,255,1) 0 0 30px , inset rgba(0,0,0,.5) 0px 0px 14px;
 	background: linear-gradient(top, darken(@niceColor, 20%) 0%, lighten(@niceColor, 20%) 100%);
 	background-clip: padding-box;
+}
+
+.map-and-votes {
+	@height: 500px;
+	
+	.map-span {
+		padding-right: 0;
+		padding-left: 0;
+		.map {
+			width: auto;
+			height: @height;
+			padding: 0;
+			margin-bottom: 0;
+		}
+	}
+	.votes-span {
+		padding-right: 0;
+		padding-left: 0;
+		.votes {
+			height: @height;
+			.vote {
+				height: 25%;
+				min-height: 25%;
+			}
+		}
+	}
+}
+
+.mood-happiness-bordering-to-incontinence {
+	background-color: @yellow;
+}
+
+.mood-pretty-happy {
+	background-color: @green;
+}
+
+.mood-general-sadness {
+	background-color: @blue;
+}
+
+.mood-devastated {
+	background-color: @red;
 }
 
 .percentage(@textColor){
@@ -210,13 +252,6 @@
 }
 
 
-.map {
-	.well();
-	width: auto;
-	height: 400px;
-	padding: 0;
-	margin-bottom: 0;
-}
 .mood-meter-location-label {
 	width: 200px;
 	height: 70px;
@@ -225,23 +260,23 @@
 	.arrow-box();
 }
 	
-	
 .icon-moodly {
 	&.whitish {
 		color: @white;
-		text-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+		font-size: 22px;
+		text-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 	}
 	&.jumbo {
 		font-size: 144px;
+		text-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
 	}
 }	
+
 @media (min--moz-device-pixel-ratio: 1.5),
        (-o-min-device-pixel-ratio: 3/2),
        (-webkit-min-device-pixel-ratio: 1.5),
        (min-device-pixel-ratio: 1.5),
        (min-resolution: 144dpi),
        (min-resolution: 1.5dppx) {
- 
 /* Retina rules! */
- 	
 }

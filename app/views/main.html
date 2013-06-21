@@ -22,16 +22,25 @@
 
 	</head>
 	<body>
-		<div class="navbar navbar-fixed-top navbar-inverse">
-			<div class="container">
+		<div class="navbar navbar-fixed-top">
+			<div class="container-fluid">
 				<a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
-				<a class="brand" href="@{Application.index()}">&{'internet_of_things'}</a>
+				<a class="brand" href="@{Application.index()}"><i class="icon icon-moodly whitish"></i></a>
 				<div class="nav-collapse collapse navbar-responsive-collapse">
-
+					<ul class="nav pull-right">
+	                    <li><a href="#">&{'nav.map'}</a></li>
+	                    <li><a href="#">&{'nav.vote'}</a></li>
+	                    <li><a href="#">&{'nav.about'}</a></li>
+	                    <li><a href="#">&{'nav.meter'}</a></li>
+                  </ul>
 				</div><!-- /.nav-collapse -->
 			</div>
 
 		</div>
 
 		#{doLayout /}
+	</body>
+	<script type="text/javascript" src="//use.typekit.net/kal3msw.js"></script>
+	<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
 </html>

@@ -38,68 +38,59 @@
 	<br/>
 </div>
 </script>
-%{
-def m = [
-0: 'devastated',
-1: 'general-sadness',
-2: 'pretty-happy',
-3: 'happiness-bordering-to-incontinence'
-]
-}%
+<!-- 
+	logo + punchline	
+-->
 <div class="container">
 	<div class="row">
 		<div class="span12">
-			<h1>&{'general-mood'}</h1>
+			<center>
+				<i class="icon icon-moodly whitish jumbo"></i>
+				<h3>&{'how_do_you_feel_today_question'}</h3>
+			</center>
 		</div>
 	</div>
 </div>
-<div class="container">
-	<div class="row">
-		#{list items: 0..3, as: 'key'}
-		#{if key >=0 && key <=3}
-		<div class="span3">
-			<div class="thumbnail smiley">
-				<div class="well">
-					<center>
-						<div data-bind="click : function(){this.vote(${key})}" class="go-big-red small ${m.get(key)?:''}"></div>
-					</center>
-				</div>
-				<div class="caption">
-					<h3 data-bind="text: '&{'description.sentiment.'+key}'"></h3>
-					<h4 data-bind="text: percentages.get(${key})"></h4>
+<!--
+	map, voting and percentage bar
+-->
+<div class="container-fluid">
+	<div class="row map-and-votes">
+		<!-- 
+			map 
+		-->
+		<div class="span9 map-span">
+			<div class="map">
+				<div id="map-canvas" style="height: 100%; width: 100%;"></div>
+			</div>
+			<div data-bind="foreach: markers.values()">
+				<div data-bind="mapMarker : { map: $root.map, markerClusterer: $root.markerClusterer, location: $data }">
+					
 				</div>
 			</div>
-			<br/>
 		</div>
-		#{/if}
-		#{/list}
-	</div>
-</div>
-<div class="container">
-	<div class="row">
-		<div class="span12">
-			<h1>&{'mood-locations'}</h1>
-		</div>
-	</div>
-	<div class="row">
-		<div class="span12">
-			<div class="thumbnail">
-				<div class="map">
-					<div id="map-canvas" style="height: 100%; width: 100%;"></div>
-				</div>
-				<div data-bind="foreach: markers.values()">
-					<div data-bind="mapMarker : { map: $root.map, markerClusterer: $root.markerClusterer, location: $data }">
-						
-					</div>
-				</div>
-				
+		<!-- 
+			votes 
+		-->
+		<div class="span3 votes-span">
+			<div class="votes" data-bind="foreach: { data: moods, as: 'mood'}">
+				<div class="vote" data-bind="css : 'mood-' + mood"></div>
 			</div>
 		</div>
 	</div>
-	<div class="row" data-bind="template : { name : 'locationTemplate', foreach: locations.values()}">
-		
+	<!-- 
+		progress bar 
+	-->
+	<div class="row">
+		<div class="progress" data-bind="foreach: moods">
+			<div class="progress-bar" data-bind="style : { width: $root.percentages.get($index())() + '%'}, css : 'progress-bar-'+$root.types()[$index()]"><span data-bind="text: $root.percentages.get($index())() + '%'"></span></div>
+		</div>
 	</div>
 </div>
+<br/>
+<br/>
+<br/>
+<br/>
 #{form action: @Application.vote(), id:'f'}
 <input name="value" type="hidden" id="h">
 </div>
