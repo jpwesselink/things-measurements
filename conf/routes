@@ -40,7 +40,7 @@ GET     /scripts/                               	staticDir:public/scripts
 GET     /javascripts/                               staticDir:public/javascripts
 GET     /stylesheets/                               staticDir:public/stylesheets
 GET		/less/										staticDir:public/bootstrap-3.0.0/less
-GET		/font/										staticDir:public/bootstrap-3.0.0/font
+GET		/fonts/										staticDir:public/bootstrap-3.0.0/fonts
 GET		/img/										staticDir:public/bootstrap-3.0.0/img
 GET		/js/										staticDir:public/bootstrap-3.0.0/docs/assets/js
 GET		/ico/										staticDir:public/bootstrap-3.0.0/ico
