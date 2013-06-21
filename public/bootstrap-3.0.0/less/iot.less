@@ -72,8 +72,15 @@
 	}
 }
 
+.stuck {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+
 .map-and-votes {
-	@height: 500px;
+	@height: 600px;
 	margin-bottom: 3em;
 	
 	.map-span {
@@ -94,6 +101,12 @@
 			.vote {
 				height: 25%;
 				min-height: 25%;
+				text-align: center;
+				i.icon-huge {
+					color: @white;
+					line-height: 100%;
+					font-size: 10em;
+				}
 			}
 		}
 	}
@@ -119,6 +132,7 @@
 	}
 }
 .about-moodly, .moodly-meter {
+	z-index: 10;
 	.holder {
 		padding-top: 2em;
 		padding-bottom: 3em;
@@ -281,6 +295,8 @@
 hr {
 	border-bottom: 1px @grayLight solid;
 }
+
+// stickies
 
 @media (min--moz-device-pixel-ratio: 1.5),
        (-o-min-device-pixel-ratio: 3/2),
