@@ -52,8 +52,29 @@
 	background-clip: padding-box;
 }
 
+.marketing {
+	font-family: "nudista-web";
+	text-align: center;
+	margin-top: 20px;
+	i {
+		margin-bottom: 2.5em;
+	}
+	.punchline {
+		margin-bottom: 2em;
+		font-style: italic;
+		font-size: 2.6em;
+		font-weight: 300;
+	}
+	.today {
+		margin-bottom: 1.5em;
+		font-size: 1.5em;
+		font-weight: 300;
+	}
+}
+
 .map-and-votes {
 	@height: 500px;
+	margin-bottom: 3em;
 	
 	.map-span {
 		padding-right: 0;
@@ -77,6 +98,60 @@
 		}
 	}
 }
+.centered {
+	text-align: center;
+}
+.votes-percentage-bar {
+	margin-bottom: 6em;
+	.progress {
+		height: 25px;
+		.progress-bar {
+			border-bottom: 0;
+			height: 25px;
+			font-family: 'nudista-web';
+			font-weight: 700;
+			font-size: 1.3em;
+			text-align: left;
+			padding-left: 5px;
+			text-shadow: none;
+			line-height: 25px;
+		}
+	}
+}
+.about-moodly, .moodly-meter {
+	.holder {
+		padding-top: 2em;
+		padding-bottom: 3em;
+	}
+}
+	
+.about-moodly {
+	color: @gray;
+		
+	.gray {
+		background-color: @grayLighter;
+	}
+}
+
+.moodly-meter {
+	color: @gray;
+	padding-top: 2em;
+	.centered {
+		h1 {
+			padding-bottom: 3em;
+			font-weight: 500;
+			text-transform: uppercase;
+		}
+	}
+}
+
+.footer {
+	color: @gray;
+	text-transform: uppercase;
+	h1, h2, h3, h4, h5, h6 {
+		font-weight: 500;
+	}
+}
 
 .mood-happiness-bordering-to-incontinence {
 	background-color: @yellow;
@@ -98,85 +173,6 @@
 	
 }
 
-.go-big-red {
-	span {
-		display: block;
-	}
-	
-	&:link, &:visited {
-		.snazzy-button(@red);
-	}
-	
-	&:hover {
-		box-shadow: rgba(255,255,255,1) 0 0 20px, rgba(255,255,255,1) 0 0 30px, inset rgba(255,255,255,.8) 0 2px 4px;
-		transform: rotate(0deg);
-		transition: transform 0.3s ease-out;
-	}
-	
-	
-	
-	&.devastated {
-		.snazzy-button(@red);
-		background-image: url(/images/red-devastated.png);
-		&:active {
-			.snazzy-button-active(@red);
-		}
-	}
-		
-	&.devastated-empty {
-		background-image: url(/images/red-devastated.png);
-		.percentage(@white);
-	}
-	
-	&.general-sadness {
-		.snazzy-button(@blue);
-		background-image: url(/images/blue-unhappy.png);
-		&:active {
-			.snazzy-button-active(@blue);
-		}
-	}
-	
-	&.general-sadness-empty {
-		background-image: url(/images/blue-unhappy.png);
-		.percentage(@white);
-		
-	}
-	
-	&.pretty-happy {
-		.snazzy-button(@green);
-		background-image: url(/images/green-content.png);
-		&:active {
-			.snazzy-button-active(@green);
-		}
-	}
-	
-	&.pretty-happy-empty {
-		background-image: url(/images/green-content.png);
-		.percentage(@black);
-	}
-	
-	&.happiness-bordering-to-incontinence {
-		.snazzy-button(@yellow);
-		background-image: url(/images/yellow-happy.png);
-		&:active {
-			.snazzy-button-active(@yellow);
-		}
-	}
-	
-	&.happiness-bordering-to-incontinence-empty {
-		background-image: url(/images/yellow-happy.png);
-		.percentage(@black);
-	}
-}
-
-.smiley {
-	.caption {
-		text-align: center;
-		h1 {
-			font-size: 50px;
-		}
-	}	
-}
 
 .how-do-you-feel {
 	color: @gray;
@@ -267,10 +263,24 @@
 		text-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 	}
 	&.jumbo {
-		font-size: 144px;
-		text-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+		font-size: 11em;
+		line-height: 1.5em;
+		text-shadow: 0 0 40px rgba(0, 0, 0, 0.18);
 	}
 }	
+
+.navbar {
+	a {
+		text-transform: uppercase;
+		font-family: 'nudista-web';
+		font-weight: 700;
+		font-size: 1.8em;
+	}
+}
+
+hr {
+	border-bottom: 1px @grayLight solid;
+}
 
 @media (min--moz-device-pixel-ratio: 1.5),
        (-o-min-device-pixel-ratio: 3/2),

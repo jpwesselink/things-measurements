@@ -38,19 +38,22 @@
 	<br/>
 </div>
 </script>
+
 <!-- 
 	logo + punchline	
 -->
 <div class="container">
 	<div class="row">
 		<div class="span12">
-			<center>
+			<div class="marketing">
 				<i class="icon icon-moodly whitish jumbo"></i>
-				<h3>&{'how_do_you_feel_today_question'}</h3>
-			</center>
+				<p class="punchline">&{'how_do_you_feel_today_question'}</p>
+				<p class="today">- ${request.date.format('EEEE d MMMM yyyy')} -</small>
+			</div>
 		</div>
 	</div>
 </div>
+
 <!--
 	map, voting and percentage bar
 -->
@@ -79,18 +82,111 @@
 		</div>
 	</div>
 	<!-- 
-		progress bar 
+		percentage bar 
 	-->
-	<div class="row">
+	<div class="row-fluid votes-percentage-bar">
 		<div class="progress" data-bind="foreach: moods">
 			<div class="progress-bar" data-bind="style : { width: $root.percentages.get($index())() + '%'}, css : 'progress-bar-'+$root.types()[$index()]"><span data-bind="text: $root.percentages.get($index())() + '%'"></span></div>
 		</div>
 	</div>
 </div>
-<br/>
-<br/>
-<br/>
-<br/>
+
+<!--
+	what the heck is moodly?
+-->
+<div class="container-fluid about-moodly">
+	<div class="row-fluid">
+		<div class="span12 gray holder">
+			<div class="container">
+				<div class="row">
+					<div class="span12">
+						<h1>&{'about_moodly_title'}</h1>
+						<hr/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span8 offset4">
+						<p>
+							#{samuel1/}
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="span12">
+						<h1 class="pull-right">
+							&{'why_moodly_title'}
+						</h1>
+						<div class="clearfix"></div>
+						<hr/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span8">
+						<p>
+							#{samuel2/}
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--
+	what is moodly meter?
+-->
+<div class="container-fluid moodly-meter">
+	<div class="row-fluid">
+		<div class="span12 holder">
+			<div class="container">
+				<div class="row centered">
+					<h1>&{'moodly_meter_title'}</h1>
+				</div>
+				<div class="row">
+					<div class="span6">
+					<p>
+						#{samuel3/}
+					</p>
+					</div>
+					<div class="span6">
+					<p>
+						#{samuel1/}
+					</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--
+	footer 
+-->
+<div class="container footer">
+	<div class="row-fluid">
+		<div class="span4 offset4 holder centered">
+			<hr/>
+			<h4>&{'contact'}</h4>
+			<address><a href="mailto:info@moodly.nl">info@moodly.nl</a></address>
+			<h4>&{'together_with'}</h4>
+			<p>
+				Rotterdam open data
+			</p>
+			<p>
+				Gemeente Rotterdam
+			</p>
+			<p>
+				Creating 010
+			</p>
+			<p>
+				Erik van Wesel
+			</p>
+			<p>
+				JP Wesselink
+			</p>
+		</div>
+	</div>
+</div>
 #{form action: @Application.vote(), id:'f'}
 <input name="value" type="hidden" id="h">
 </div>
