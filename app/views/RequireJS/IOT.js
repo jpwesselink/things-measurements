@@ -1,4 +1,4 @@
-define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox", "markerclusterer", "bootstrap", "waypoints-sticky"], function($, ko, _, MarkerLabel, InfoBox, MarkerClusterer){
+define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox", "markerclusterer", "bootstrap", "waypoints-sticky", "jquery.fittext", "heatmap-gmaps"], function($, ko, _, MarkerLabel, InfoBox, MarkerClusterer){
     var IOT;
     
     IOT = {
@@ -24,6 +24,7 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
         },
         timeoutId : null,
         viewModel : {
+        	hasGeoEnabled : ko.observable(false),
             lat : ko.observable(),
             lng: ko.observable(),
             value : ko.observable(),
@@ -49,6 +50,20 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             }
         },
         init : function (options) {
+        	this.viewModel.widthPercentages = ko.computed(function(){
+        		var widthPercentages = this.percentages.values();
+        		var cumulative = 0;
+        		var that = this;
+				_.map(this.percentages.values(), function(percentage, index, scope){
+					if(index < scope.length-1){
+						cumulative+=percentage;
+					}
+					return cumulative;
+				});
+				widthPercentages[widthPercentages.length-1] = 100 - cumulative;
+        		return widthPercentages;
+        	}, this.viewModel);
+        	
             if(options.data.locations){
                 this.data.locations = options.data.locations;
             }
@@ -68,7 +83,6 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
         },
         
         initWaypoints: function(){
-        	
         },
         prepareTemplates : function () {
             this.templates.infoBox = _.template($("#infoboxTemplate").html());  
@@ -129,6 +143,9 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
         },
         initMap : function(){
             var mapOptions = {
+            		scrollwheel: false,	
+            		
+        		draggable: false,
                 center: new google.maps.LatLng(-34.397, 150.644),
                 zoom: 18,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -194,6 +211,10 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             var markerClusterer = new MarkerClusterer(map);
             this.viewModel.map = map;
             this.viewModel.markerClusterer = markerClusterer;
+            
+            google.maps.event.addListener(map, "bounds_changed", function() {
+            	var bounds = map.getBounds();
+        	});
         },
         
         createMarkers : function () {
@@ -302,7 +323,6 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
                 } else {
                     return false;
                 }
-                console.log("location", location);
                 a = location;
                 map.panTo(location);
                 map.setCenter(location);
@@ -345,9 +365,10 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
                 success : function(geoLocation) {
                     that.viewModel.lat(geoLocation.coords.latitude);
                     that.viewModel.lng(geoLocation.coords.longitude);
+                    that.viewModel.hasGeoEnabled(true);
                 },
                 error : function() {
-    
+                	that.viewModel.hasGeoEnabled(false);
                 }
             });
         },

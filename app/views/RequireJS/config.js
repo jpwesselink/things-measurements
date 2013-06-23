@@ -2,6 +2,9 @@ requirejs.config({
     baseUrl: "/scripts",
     paths : {
         "jquery" : "jquery-1.8.1",
+        "jquery.fittext" : "jquery/jquery.fittext",
+        "heatmap" : "heatmap/heatmap",
+        "heatmap-gmaps" : "heatmap/heatmap-gmaps",
         "waypoints" : "jquery/waypoints",
         "waypoints-sticky" : "jquery/waypoints-sticky",
         "jquery.geolocation" : "jquery/jquery.geolocation",
@@ -45,8 +48,11 @@ requirejs.config({
         "ko.bindingHandlers.mapMarker" : {
             deps : ["knockout", "google-maps-v3"]
         },
-        "waypoints" : {
+        "heatmap" : {
         	deps: ["jquery"]
+        },
+        "heatmap-gmaps" : {
+        	deps: ["heatmap"]
         },
         "waypoints-sticky" : {
         	deps: ["waypoints"]
@@ -55,6 +61,9 @@ requirejs.config({
             deps: ["jquery"],
             exports : "jQuery.geolocation"
         },
+    	"jquery.fittext" : {
+    		deps: ["jquery"],
+    	},
         "jquery.peity" : {
             deps: ["jquery"],
             exports : "jQuery.fn.peity"

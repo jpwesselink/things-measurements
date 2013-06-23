@@ -60,6 +60,7 @@
 		margin-bottom: 2.5em;
 	}
 	.punchline {
+		line-height: normal;
 		margin-bottom: 2em;
 		font-style: italic;
 		font-size: 2.6em;
@@ -128,6 +129,9 @@
 			padding-left: 5px;
 			text-shadow: none;
 			line-height: 25px;
+			span {
+				margin-left: 5px;
+			}
 		}
 	}
 }
@@ -169,18 +173,42 @@
 
 .mood-happiness-bordering-to-incontinence {
 	background-color: @yellow;
+	&:hover {
+		background-color: lighten(@yellow, 10%);
+	}
+	&:active {
+		background-color: lighten(@yellow, 15%);
+	}
 }
 
 .mood-pretty-happy {
 	background-color: @green;
+	&:hover {
+		background-color: lighten(@green, 10%);
+	}
+	&:active {
+		background-color: lighten(@green, 15%);
+	}
 }
 
 .mood-general-sadness {
 	background-color: @blue;
+	&:hover {
+		background-color: lighten(@blue, 10%);
+	}
+	&:active {
+		background-color: lighten(@blue, 15%);
+	}
 }
 
 .mood-devastated {
 	background-color: @red;
+	&:hover {
+		background-color: lighten(@red, 10%);
+	}
+	&:active {
+		background-color: lighten(@red, 15%);
+	}
 }
 
 .percentage(@textColor){
@@ -198,24 +226,6 @@
 	img {
 	    max-width: none;
 	}
-}
-@media (max-width: 767px) {
-	.smiley {
-		.well {
-			.pull-left();
-			margin-bottom: 0;	
-			margin-right: 20px;
-		}
-		.caption {
-			.clearfix();
-			padding-bottom: 0;
-			text-align: left;
-			h1 {
-				line-height: 100px;
-				font-size: 60px;
-			}
-		}
-	}	
 }
 
 .marker-label {
@@ -276,6 +286,11 @@
 		font-size: 22px;
 		text-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 	}
+	&.medium {
+		color: @white;
+		font-size: 4em;
+		text-shadow: 0 0 20px rgba(0, 0, 0, 0.156);
+	}
 	&.jumbo {
 		font-size: 11em;
 		line-height: 1.5em;
@@ -305,4 +320,124 @@ hr {
        (min-resolution: 144dpi),
        (min-resolution: 1.5dppx) {
 /* Retina rules! */
+}
+
+
+/* Landscape phones and down */
+@media (max-width: 480px) {
+	.marketing {
+		i {
+			.hidden();
+		}
+		.punchline {
+			margin-bottom: 0.5em;
+			font-size: 1.8em;
+		}
+		.today {
+			margin-bottom: 1.5em;
+			font-size: 1em;
+		}
+	}
+	.map-and-votes, .votes-percentage-bar {
+		padding-left: 12px;
+		padding-right: 12px;
+	}
+	.map-and-votes {
+		@height: 300px;
+	
+		.map-span {
+			.map {
+				height: @height;
+			}
+		}
+		.votes-span {
+			@voteHeight: 6em;
+			.pull-left();
+			width: 100%;
+			.votes {
+				height: @voteHeight;
+				.vote {
+					.pull-left();
+					width: 25%;
+					height: @voteHeight;
+					i.icon-huge {
+						line-height: 100%;
+						font-size: @voteHeight;
+					}
+				}
+			}
+		}
+	}
+	.votes-percentage-bar {
+		.progress {
+			.progress-bar {
+				font-size: 1em;
+			}
+		}
+	}
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+	.marketing {
+		i {
+			.hidden();
+		}
+		.punchline {
+			margin-bottom: 0.5em;
+			font-size: 1.8em;
+		}
+		.today {
+			margin-bottom: 1.5em;
+			font-size: 1em;
+		}
+	}
+	.map-and-votes {
+		@height: 400px;
+	
+		.map-span {
+			.map {
+				height: @height;
+			}
+		}
+		.votes-span {
+			@voteHeight: 9em;
+			.pull-left();
+			width: 100%;
+			.votes {
+				height: @voteHeight;
+				.vote {
+					.pull-left();
+					width: 25%;
+					height: @voteHeight;
+					i.icon-huge {
+						line-height: 100%;
+						font-size: @voteHeight;
+					}
+				}
+			}
+		}
+	}
+	.votes-percentage-bar {
+		.progress {
+			.progress-bar {
+				font-size: 1em;
+			}
+		}
+	}
+	.smiley {
+		.well {
+			.pull-left();
+			margin-bottom: 0;	
+			margin-right: 20px;
+		}
+		.caption {
+			.clearfix();
+			padding-bottom: 0;
+			text-align: left;
+			h1 {
+				line-height: 100px;
+				font-size: 60px;
+			}
+		}
+	}	
 }

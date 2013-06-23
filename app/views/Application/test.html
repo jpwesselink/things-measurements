@@ -42,8 +42,8 @@
 <!-- 
 	logo + punchline	
 -->
-<div class="container">
-	<div class="row">
+<div class="container-fluid">
+	<div class="row-fluid">
 		<div class="span12">
 			<div class="marketing">
 				<i class="icon icon-moodly whitish jumbo"></i>
@@ -55,10 +55,36 @@
 </div>
 
 <!--
+	no geo 
+-->
+<!-- ko if: !hasGeoEnabled() -->
+<div class="container-fluid">
+	<div class="alert alert-warning alert-block">
+		<h4>&{'geo.disabled'}</h4>
+		<p>&{'geo.disabled_explanation'}</p>
+	</div>
+</div>
+<!-- /ko -->
+<!--
 	map, voting and percentage bar
 -->
 <div class="container-fluid">
-	<div class="row map-and-votes">
+	<div class="row-fluid map-and-votes">
+		<!-- 
+			votes 
+		-->
+		<div class="span2 votes-span pull-right">
+			<!-- ko if: hasGeoEnabled() -->
+			<div class="votes" data-bind="foreach: { data: moods, as: 'mood'}">
+				<div class="vote" data-bind="css : 'mood-' + mood">
+					<i class="icon icon-huge" data-bind="css : 'icon-mood-'+mood, click : function(){ $root.vote($index())}"></i>
+				</div>
+			</div>
+			<!-- /ko -->
+			<!-- ko if: !hasGeoEnabled() -->
+			<p>&{'geo.disabled_explanation'}</p>
+			<!-- /ko -->
+		</div>
 		<!-- 
 			map 
 		-->
@@ -72,23 +98,20 @@
 				</div>
 			</div>
 		</div>
-		<!-- 
-			votes 
-		-->
-		<div class="span2 votes-span">
-			<div class="votes" data-bind="foreach: { data: moods, as: 'mood'}">
-				<div class="vote" data-bind="css : 'mood-' + mood">
-					<i class="icon icon-huge" data-bind="css : 'icon-mood-'+mood, click : function(){ $root.vote($index())}"></i>
-				</div>
-			</div>
-		</div>
+	</div>
+	<div class="row">
+		<br/>
+		<br/>
 	</div>
 	<!-- 
 		percentage bar 
 	-->
 	<div class="row-fluid votes-percentage-bar">
 		<div class="progress" data-bind="foreach: moods">
-			<div class="progress-bar" data-bind="style : { width: $root.percentages.get($index())() + '%'}, css : 'progress-bar-'+$root.types()[$index()]"><span data-bind="text: $root.percentages.get($index())() + '%'"></span></div>
+			<div class="progress-bar" style="margin: 0; padding: 0" data-bind="style : { 
+				width: $root.widthPercentages()[$index()] + '%'}, 
+				css : 'progress-bar-'+$root.types()[$index()]
+			"><span data-bind="text: $root.percentages.get($index())() + '%'"></span></div>
 		</div>
 	</div>
 </div>

@@ -10,6 +10,7 @@ public class Serializers {
 	public static final JSONSerializer locationSerializer;
 	public static final JSONSerializer locationEventSerializer;
 	public static final JSONSerializer measurementSerializer;
+	public static final JSONSerializer measurementCompactSerializer;
 	public static final JSONSerializer percentagesSerializer;
 	public static final JSONSerializer measurementDeepSerializer;
 	
@@ -45,6 +46,12 @@ public class Serializers {
 				"value",
 				"createdAt"
 		).exclude("*").prettyPrint(prettyPrint);
+		
+		measurementCompactSerializer = new JSONSerializer().include(
+				"value",
+				"lng",
+				"lat"
+				).exclude("*").prettyPrint(false);
 		
 		percentagesSerializer = new JSONSerializer().exclude("geoLocation", "*.id", "*.entityId").prettyPrint(prettyPrint);
 		

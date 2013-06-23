@@ -21,7 +21,7 @@ public class Application extends Controller {
     	if(session.get("lastVote") != null){
     		try {
     			lastVote = DateTime.parse(session.get("lastVote"));
-    			if(new DateTime().minusSeconds(Integer.parseInt(Play.configuration.getProperty("voting.interval.minutes", "60"))).isAfter(lastVote)){
+    			if(new DateTime().minusSeconds(Integer.parseInt(Play.configuration.getProperty("voting.interval.minutes", "480"))).isAfter(lastVote)){
     				session.remove("yourVote");
     			}
     		}  finally {
@@ -71,6 +71,7 @@ public class Application extends Controller {
     	renderArgs.put("percentages", Measurement.getPercentages());
     	render();
     }
+    
     public static void nuke(){
     	render();
     }
