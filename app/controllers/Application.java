@@ -35,7 +35,7 @@ public class Application extends Controller {
     		}
     	}
     	renderArgs.put("percentages", Measurement.getPercentages());
-    	render("@test");
+    	render();
     }
    
     public static void show(){

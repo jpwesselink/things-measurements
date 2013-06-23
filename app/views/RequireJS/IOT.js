@@ -1,4 +1,4 @@
-define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox", "markerclusterer", "bootstrap", "waypoints-sticky", "jquery.fittext", "heatmap-gmaps"], function($, ko, _, MarkerLabel, InfoBox, MarkerClusterer){
+define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox", "markerclusterer", "bootstrap", "waypoints-sticky", "jquery.fittext", "heatmap-gmaps", "highlight"], function($, ko, _, MarkerLabel, InfoBox, MarkerClusterer){
     var IOT;
     
     IOT = {
@@ -6,7 +6,6 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             locations : []
         },
         actions : {},
-        templates : {},
         markerImages : {
             smileys: ['images/red-devastated-tiny-shadow.png', 'images/blue-unhappy-tiny-shadow.png', 'images/green-content-tiny-shadow.png', 'images/yellow-happy-tiny-shadow.png']
         },
@@ -19,11 +18,9 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             ),
             locations : {}  
         },
-        infoBoxes : {
-            locations : {}
-        },
         timeoutId : null,
         viewModel : {
+        	socketData : ko.observableArray(),
         	hasGeoEnabled : ko.observable(false),
             lat : ko.observable(),
             lng: ko.observable(),
@@ -63,17 +60,19 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
 				widthPercentages[widthPercentages.length-1] = 100 - cumulative;
         		return widthPercentages;
         	}, this.viewModel);
-        	
+        	this.viewModel.socketDataShortened = ko.computed(function(){
+        		return this.socketData().reverse().slice(0, 3);
+        		
+        	}, this.viewModel);
             if(options.data.locations){
                 this.data.locations = options.data.locations;
             }
             if(options.actions){
                 $.extend(this.actions, options.actions);
             }
-            this.prepareTemplates();
             this.createMarkers();
             this.initMap();
-            this.parseLocations();
+           
             this.initWaypoints();
             ko.applyBindings(this.viewModel);
             this.determineGeo();
@@ -84,63 +83,8 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
         
         initWaypoints: function(){
         },
-        prepareTemplates : function () {
-            this.templates.infoBox = _.template($("#infoboxTemplate").html());  
-        },
         
-        parseLocations : function () {
-            var that = this;
-            $.each(this.data.locations, function (index, location){
-               // that.createLocationInfoBox(location);
-                that.viewModel.locations.set(location.slug, location);
-                that.viewModel.markers.set(location.slug, new that.viewModel.Marker({
-                    lat : location.lat,
-                    lng : location.lng,
-                    name : location.slug,
-                    title : location.name,
-                    percentages : location.percentages
-                }));
-               
-            });
-        },
         
-        createLocationInfoBox : function (location){
-            if(this.infoBoxes.locations[location.slug]){
-                this.infoBoxes.locations[location.slug].setMap(null);
-            }
-            
-            if(!location.lat || !location.lng){
-                return false;
-            }
-            var coords = new google.maps.LatLng(location.lat, location.lng);
-            var percentages = [];
-            for(var i = 0;i<4;i++){
-                percentages.push(location.percentages[i]?location.percentages[i]:0);
-            }
-            
-            var html = this.templates.infoBox({
-                percentages : percentages
-            });
-           
-            var that = this;
-            this.infoBoxes.locations[location.slug] = new InfoBox({
-                content: location.slug + " " + html,
-                boxClass: "info-box",
-                closeBoxURL : "",
-                pixelOffset: new google.maps.Size(-140, -100),
-                position: coords,
-                infoBoxClearance: new google.maps.Size(10, 10),
-                isHidden: false,
-                pane: "floatPane",
-                enableEventPropagation: false
-            });
-            
-            google.maps.event.addListener(this.infoBoxes.locations[location.slug], 'domready', function() {
-                ko.applyBindings(that.viewModel, document.getElementById("inside"));
-            });
-            this.infoBoxes.locations[location.slug].open(map);
-            
-        },
         initMap : function(){
             var mapOptions = {
             		scrollwheel: false,	
@@ -241,23 +185,22 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             var socket = new WS(url);
             var that = this;
             socket.onmessage = function(response) {
-                
-                    var socketEvent = $.parseJSON(response.data);
-                    switch(socketEvent["class"]){
-                        case "models.Feed$Vote":
-                            that.parsePercentages(socketEvent.percentages);
-                            if(socketEvent.measurement){
-                                that.parseLatLng(socketEvent.measurement);
-                            }
-                            
-                        break;
-                        case "models.Feed$LocationEvent":
-                            
-                        break;
-                        case "models.Measurement":
-                            that.parseLatLng(socketEvent);
-                        break;
-                    }
+            	IOT.viewModel.socketData.push(response.data);
+                var socketEvent = $.parseJSON(response.data);
+                switch(socketEvent["class"]){
+                    case "models.Feed$Vote":
+                        that.parsePercentages(socketEvent.percentages);
+                        if(socketEvent.measurement){
+                            that.parseLatLng(socketEvent.measurement);
+                        }
+                    break;
+                    case "models.Feed$LocationEvent":
+                        
+                    break;
+                    case "models.Measurement":
+                        that.parseLatLng(socketEvent);
+                    break;
+                }
                
             }
             socket.onopen = function () {

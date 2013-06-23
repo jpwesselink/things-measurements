@@ -8,7 +8,6 @@ GET		/scripts/IOT.js								RequireJS.IOT
 GET		/scripts/main.js							RequireJS.main
 
 *      	/                							module:secure
-GET		/test										Application.test
 WS     	/socket                  					MeasurementsFeed.FeedSocket.join   
 GET		/											Application.index
 GET		/stemmen									Application.show
@@ -39,11 +38,11 @@ GET		/images/									staticDir:public/images
 GET     /scripts/                               	staticDir:public/scripts
 GET     /javascripts/                               staticDir:public/javascripts
 GET     /stylesheets/                               staticDir:public/stylesheets
-GET		/less/										staticDir:public/bootstrap-3.0.0/less
-GET		/fonts/										staticDir:public/bootstrap-3.0.0/fonts
-GET		/img/										staticDir:public/bootstrap-3.0.0/img
-GET		/js/										staticDir:public/bootstrap-3.0.0/docs/assets/js
-GET		/ico/										staticDir:public/bootstrap-3.0.0/ico
+GET		/less/										staticDir:public/bootstrap-3.0.0-wip/less
+GET		/fonts/										staticDir:public/bootstrap-3.0.0-wip/fonts
+GET		/img/										staticDir:public/bootstrap-3.0.0-wip/img
+GET		/js/										staticDir:public/bootstrap-3.0.0-wip/docs/assets/js
+GET		/ico/										staticDir:public/bootstrap-3.0.0-wip/ico
 
 *      	/admin              						module:crud
 DELETE	/crudmeasurements							CRUDMeasurements.deleteAll

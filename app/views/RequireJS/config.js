@@ -5,6 +5,7 @@ requirejs.config({
         "jquery.fittext" : "jquery/jquery.fittext",
         "heatmap" : "heatmap/heatmap",
         "heatmap-gmaps" : "heatmap/heatmap-gmaps",
+        "highlight" : "highlight.pack",
         "waypoints" : "jquery/waypoints",
         "waypoints-sticky" : "jquery/waypoints-sticky",
         "jquery.geolocation" : "jquery/jquery.geolocation",
@@ -12,6 +13,7 @@ requirejs.config({
         "ko.observableDictionary" : "ko/ko.observableDictionary",
         "ko.underscoreTemplateEngine" : "ko/ko.underscoreTemplateEngine",
         "ko.bindingHandlers.peity" : "ko/ko.bindingHandlers.peity",
+        "ko.bindingHandlers.highlight" : "ko/ko.bindingHandlers.highlight",
         "ko.bindingHandlers.mapMarker" : "ko/ko.bindingHandlers.mapMarker",
         "knockout" : "knockout-2.2.1",
         "markerwithlabel" : "google/markerwithlabel",
@@ -41,6 +43,9 @@ requirejs.config({
         },
         "ko.underscoreTemplateEngine" : {
             deps : ["knockout", "underscore"]
+        },
+        "ko.bindingHandlers.highlight" : {
+        	deps : ["highlight"]
         },
         "ko.bindingHandlers.peity" : {
             deps : ["knockout", "jquery.peity", "underscore"]
@@ -139,7 +144,7 @@ requirejs.config({
             deps : ["jquery"]
         },
         "IOT" : {
-            deps : ["domReady", "jquery", "knockout", "ko.observableDictionary", "ko.underscoreTemplateEngine",  "ko.bindingHandlers.mapMarker", "ko.bindingHandlers.peity", "markerwithlabel", "markerclusterer", "infobox", "jquery.geolocation"]
+            deps : ["domReady", "jquery", "knockout", "ko.observableDictionary", "ko.underscoreTemplateEngine",  "ko.bindingHandlers.mapMarker", "ko.bindingHandlers.highlight", "ko.bindingHandlers.peity", "markerwithlabel", "markerclusterer", "infobox", "jquery.geolocation"]
         }
     }
 }); 

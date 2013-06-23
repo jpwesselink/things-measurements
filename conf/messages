@@ -30,3 +30,7 @@ contact=contact
 moodly_meter_title=Moodly meter
 about_moodly_title=Moodly?
 why_moodly_title=Daarom Moodly
+moodly_download_data_title=Download data
+moodly_websocket_title=Websocket
+moodly_rest_title=REST
+about_moodly_api_title=Moodly API

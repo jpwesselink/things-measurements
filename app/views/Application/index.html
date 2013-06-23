@@ -1,388 +1,228 @@
 #{extends 'main.html'/}
 #{set 'moreScripts'}
-
-<script src="@{'/public/javascripts/jquery.geolocation.js'}" type="text/javascript" charset="${_response_encoding}"></script>
-<script src="@{'/public/javascripts/knockout-2.2.1.js'}" type="text/javascript" charset="${_response_encoding}"></script>
-<script src="@{'/public/javascripts/ko.observableDictionary.js'}" type="text/javascript" charset="${_response_encoding}"></script>
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=${play.configuration.getProperty('google.maps.api.key')}&sensor=false"></script>
-<script src="@{'/public/javascripts/markerwithlabel.js'}" type="text/javascript" charset="${_response_encoding}"></script>
-<script src="@{'/public/javascripts/infobox.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+<script type="text/javascript" src="@{'/public/scripts/require.js'}"></script>
+<script type="text/javascript" src="@{RequireJS.config()}"></script>
+<script type="text/javascript" src="@{RequireJS.main()}"></script>
 #{i18n/}
-<script type="text/javascript">
-	$(function() {
-		
-		IOT = {
-			data : {
-				locations : ${models.Location.all().fetch().serializeWith('locationSerializer').raw()}
-			},
-			markerImages : {
-				smileys: ['public/images/red-devastated-tiny-shadow.png', 'public/images/blue-unhappy-tiny-shadow.png', 'public/images/green-content-tiny-shadow.png', 'public/images/yellow-happy-tiny-shadow.png']
-			},
-			markers : {
-				smileys : [],
-				location : new google.maps.MarkerImage('/public/images/red-devastated-empty.png',
-				   new google.maps.Size(200, 200),
-				   new google.maps.Point(0, 0),
-				   new google.maps.Point(0, 200)
-			   	),
-			   	locations : {}	
-			},
-			infoBoxes : {
-				locations : {}
-			},
-			timeoutId : null,
-			viewModel : {
-				lat : ko.observable(),
-				lng: ko.observable(),
-				value : ko.observable(),
-				votedAt : ko.observable(),
-				percentages : ko.observableDictionary({0:0,1:0,2:0,3:0})
-			},
-			init : function () {
-				this.createMarkers();
-				this.initMap();
-				this.parseLocations();
-				ko.applyBindings(this.viewModel);
-				this.determineGeo();
-				if(!this.initSocket()){
-					this.initPolling();
-				}
-			},
-			parseLocations : function () {
-				var that = this;
-				$.each(this.data.locations, function (index, location){
-					that.createLocationInfoBox(location);
-				});
-			},
-			createLocationInfoBox : function (location){
-				console.log("asd");
-				if(this.infoBoxes.locations[location.slug]){
-					this.infoBoxes.locations[location.slug].setMap(null);
-				}
-				
-				if(!location.lat || !location.lng){
-					return false;
-				}
-				var coords = new google.maps.LatLng(location.lat, location.lng);
-				var percentages = [];
-				for(var i = 0;i<4;i++){
-					percentages.push(location.percentages[i]?location.percentages[i]:0);
-				}
-				var asd =  '<div class="progress" style="height: 50px">'+
-             		'<div class="progress-bar progress-bar-danger" style="width: ' + percentages[0]+ '%"></div>'+
-             		'<div class="progress-bar progress-bar-info" style="width: ' + percentages[1]+ '%"></div>'+
-              		'<div class="progress-bar progress-bar-warning" style="width: ' + percentages[2]+ '%"></div>'+
-              		'<div class="progress-bar progress-bar-success" style="width: ' + percentages[3]+ '%"></div>'+
-              		'</div>';
-				this.infoBoxes.locations[location.slug] = new InfoBox({
-				    content: location.slug,
-				    boxClass: "info-box",
-				    closeBoxURL : "",
-				    pixelOffset: new google.maps.Size(-140, -100),
-					position: coords,
-					infoBoxClearance: new google.maps.Size(10, 10),
-					isHidden: false,
-					pane: "floatPane",
-					enableEventPropagation: false
-				});
-				
-			  	
-				this.infoBoxes.locations[location.slug].open(map);
-				
-			},
-			initMap : function(){
-		        var mapOptions = {
-					center: new google.maps.LatLng(-34.397, 150.644),
-					zoom: 18,
-					mapTypeId: google.maps.MapTypeId.ROADMAP,
-					styles : [
-						{
-							"featureType": "landscape",
-							"stylers": [
-								{ "hue": "#FFA800" },
-								{ "saturation": 0 },
-								{ "lightness": 0 },
-								{ "gamma": 1 }
-							]
-						},
-						{
-							"featureType": "road.highway",
-							"stylers": [
-								{ "hue": "#FFB900" },
-								{ "saturation": 0 },
-								{ "lightness": -1.4210854715202004e-14 },
-								{ "gamma": 1 }
-							]
-						},
-						{
-							"featureType": "road.arterial",
-							"stylers": [
-								{ "hue": "#FFB300" },
-								{ "saturation": 0 },
-								{ "lightness": 0 },
-								{ "gamma": 1 }
-							]
-						},
-						{
-							"featureType": "road.local",
-							"stylers": [
-								{ "hue": "#FFA800" },
-								{ "saturation": 0 },
-								{ "lightness": 0 },
-								{ "gamma": 1 }
-							]
-						},
-						{
-							"featureType": "water",
-							"stylers": [
-								{ "hue": "#FFC300" },
-								{ "saturation": 0 },
-								{ "lightness": 0 },
-								{ "gamma": 1 }
-							]
-						},
-						{
-							"featureType": "poi",
-							"stylers": [
-								{ "hue": "#FF8C00" },
-								{ "saturation": 0 },
-								{ "lightness": 0 },
-								{ "gamma": 1 }
-							]
-						}
-					]
-		        };
-				map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-		     },
-			createMarkers : function () {
-				var that = this;
-				$.each(this.markerImages.smileys, function (index, markerImage){
-					that.markers.smileys.push(
-						new google.maps.MarkerImage(markerImage,
-						   new google.maps.Size(49, 32),
-						   new google.maps.Point(0,0),
-						   new google.maps.Point(0, 32)
-					   )
-				   )
-				});
-			},
-			initSocket : function () {
-				return this.openSocket('@@{MeasurementsFeed.FeedSocket.join()}');
-			},
-			openSocket : function (url) {
-				var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
-				if(!WS){
-					return false;
-				}
-				var socket = new WS(url);
-    			var that = this;
-    			socket.onmessage = function(response) {
-			    	try {
-			    		var socketEvent = $.parseJSON(response.data);
-			    		console.log(socketEvent);
-			    		
-			    		switch(socketEvent["class"]){
-			    			case "models.Feed$Vote":
-			    				that.parsePercentages(socketEvent.percentages);
-			    				if(socketEvent.measurement){
-				    				that.parseLatLng(socketEvent.measurement);
-			    				}
-			    				
-			    			break;
-			    			case "models.Feed$LocationEvent":
-				    			
-			    			break;
-			    			case "models.Measurement":
-			    			console.log("WTF");
-			    				that.parseLatLng(socketEvent);
-			    			break;
-			    		}
-			    	} catch (e) {
-			    		
-			    	}
-			    }
-			    socket.onopen = function () {
-			    	that.fetchPercentages();
-			    }
-			    socket.onerror = function () {
-			    	
-			    }
-			    socket.onclose = function () {
-			    	// wait a bit
-			    	socket.close();
-			    	setTimeout(function (){
-						that.openSocket(url);
-					}, 5000);
-			    }
-			    return socket;
-			},
-			parseLatLng : function (measurement){
-				
-				if(measurement){
-					var location;
-					if(this.currentMarker){
-						this.currentMarker.setMap(null);
-					}
-					if(measurement.location != undefined){
-						location = new google.maps.LatLng(measurement.location.lat, measurement.location.lng);
-						this.createLocationInfoBox(measurement.location);
-						
-						/*
-						 * 
-						var icon = this.markers.location;
-						var infowindow = new InfoBox({
-						    content: "contentString",
-						    boxClass: "info-box",
-						    pixelOffset: new google.maps.Size(0, -100),
-							
-							infoBoxClearance: new google.maps.Size(10, 10),
-							isHidden: false,
-							pane: "floatPane",
-							enableEventPropagation: false
-						});
-						this.currentMarker = new google.maps.Marker({
-							position: location,
-							map: map
-					  	});
-					  	
-						infowindow.open(map, this.currentMarker);
-						 */
-					} else if(measurement.lat && measurement.lng) {
-						location = new google.maps.LatLng(measurement.lat, measurement.lng);
-						var icon = this.markers.smileys[measurement.value];
-						
-						this.currentMarker = new MarkerWithLabel({
-							position: location,
-							map: map,
-							icon: icon,
-							labelContent: i18n('label.sentiment.' + measurement.value),
-       						labelAnchor: new google.maps.Point(0, 0),
-       						labelClass: 'marker-label'
-					  	});
-					
-					} else {
-						return false;
-					}
-					map.panTo(location);
-				  	map.setCenter(location);
-				}
-			},
-			parsePercentages : function (percentages){
-				for(var i = 0; i<4; i++){
-					var percentage = percentages[i];
-					if(!percentage){
-						percentage = 0;
-					}
-					this.viewModel.percentages.set(i, Math.round(percentage * 100)/100);
-				}
-			},
-			initPolling : function () {
-				this.fetchPercentages(true);
-			},
-			fetchPercentages : function (recurrent) {
-				if(this.timeoutId){
-					clearTimeout(this.timeoutId);
-				}
-				var that = this;
-				$.ajax({
-					url: #{jsAction @Measurements.percentages()/}(),
-					type : "GET",
-					dataType: "json"
-				}).done(function(data, textStatus, jqXHR){
-					that.parsePercentages(data);
-				}).always(function(){
-					if(recurrent){
-						that.timeoutId = setTimeout(function(){
-							that.fetchPercentages();
-						}, 5000);
-					}
-				});
-			},
-			determineGeo : function () {
-				var that = this;
-				$.geolocation.get({
-					success : function(geoLocation) {
-						that.viewModel.lat(geoLocation.coords.latitude);
-						that.viewModel.lng(geoLocation.coords.longitude);
-					},
-					error : function() {
-		
-					}
-				});
-			},
-			vote : function (v){
-				var that = this;
-				$.ajax({
-					url: #{jsAction @Application.vote(':value', ':lng', ':lat') /}({
-						value: v+"",
-						lng: that.viewModel.lng() + "",
-						lat: that.viewModel.lat() + ""
-					}),
-					type : "POST"
-				}).fail(function(){
-					
-				}).done(function(data, textStatus, jqXHR){
-					that.viewModel.value(v);
-				});
-			}
-		};
-		IOT.init();
-		
-	}); 
-
-	
-</script>
 #{/}
-%{
-def m = [
-0: 'devastated',
-1: 'general-sadness',
-2: 'pretty-happy',
-3: 'happiness-bordering-to-incontinence'
-]
-}%
-<div class="container">
+
+<div class="container-fluid">
 	<div class="row">
-		<div class="span12">
-			<h1>&{'general-mood'}</h1>
+		<div class="col-lg-12"">
+			<div class="marketing">
+				<i class="icon icon-moodly whitish hidden-sm"></i>
+				<p class="punchline">&{'how_do_you_feel_today_question'}</p>
+				<p class="today">- ${request.date.format('EEEE d MMMM yyyy')} -</small>
+			</div>
 		</div>
 	</div>
 </div>
-<div class="container">
+
+<!-- ko if: !hasGeoEnabled() -->
+<div class="container-fluid">
 	<div class="row">
-		<div class="span12">
-			<div class="thumbnail">
-				<div class="map">
-					<div id="map-canvas" style="height: 100%; width: 100%;"></div>
-					<div data-bind="mapMarker: {map: map}"></div>
+		<div class="col-lg-12">
+			<div class="alert alert-warning alert-block">
+				<h4>&{'geo.disabled'}</h4>
+				<p>&{'geo.disabled_explanation'}</p>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /ko -->
+<!--
+	map, voting and percentage bar
+-->
+<div class="container-fluid">
+	<div class="row map-and-votes">
+		<!-- 
+			votes 
+		-->
+		<div class="col-12 col-sm-2 col-lg-2 col-push-10 col-sm-push-clear votes-span">
+			<!-- ko if: hasGeoEnabled() -->
+			<div class="votes" data-bind="foreach: { data: moods, as: 'mood'}">
+				<div class="vote col-lg-12 col-sm-12 col-3" data-bind="css : 'mood-' + mood">
+					<i class="icon icon-huge" data-bind="css : 'icon-mood-'+mood, click : function(){ $root.vote($index())}"></i>
+				</div>
+			</div>
+			<!-- /ko -->
+			<!-- ko if: !hasGeoEnabled() -->
+			<p>&{'geo.disabled_explanation'}</p>
+			<!-- /ko -->
+		</div>
+		<!-- 
+			map 
+		-->
+		<div class="col-12 col-sm-10 col-lg-10 col-pull-2 col-sm-pull-clear map-span">
+			<div class="map">
+				<div id="map-canvas" style="height: 100%; width: 100%;"></div>
+			</div>
+			<div data-bind="foreach: markers.values()">
+				<div data-bind="mapMarker : { map: $root.map, markerClusterer: $root.markerClusterer, location: $data }">
+					
 				</div>
 			</div>
 		</div>
 	</div>
-	<br/>
-	<div class="row">
-		#{list items: 0..3, as: 'key'}
-		#{if key >=0 && key <=3}
-		<div class="span3">
-			<div class="thumbnail smiley">
-				<div class="well">
-					<center>
-						<div onclick="IOT.vote(${key})" class="go-big-red small ${m.get(key)?:''}"></div>
-					</center>
-				</div>
-				<div class="caption">
-					<h1 data-bind="text: percentages.get(${key})"></h1>
-				</div>
+	
+	<!-- 
+		percentage bar 
+	-->
+	<div class="row votes-percentage-bar">
+		<div class="col-lg-12">
+			<div class="progress" data-bind="foreach: moods">
+				<div class="progress-bar" style="margin: 0; padding: 0" data-bind="style : { 
+					width: $root.widthPercentages()[$index()] + '%'}, 
+					css : 'progress-bar-'+$root.types()[$index()]
+				"><span data-bind="text: $root.percentages.get($index())() + '%'"></span></div>
 			</div>
-			<br/>
 		</div>
-		#{/if}
-		#{/list}
 	</div>
 </div>
-<div class="container">
-	
-	
+
+<!--
+	what the heck is moodly?
+-->
+<div class="container-fluid about-moodly">
+	<div class="row-">
+		<div class="col-lg-12 gray holder">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<h1>&{'about_moodly_title'}</h1>
+						<hr/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-8 col-offset-4">
+						<p>
+							#{samuel1/}
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<h1 class="pull-right">
+							&{'why_moodly_title'}
+						</h1>
+						<div class="clearfix"></div>
+						<hr/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-8">
+						<p>
+							#{samuel2/}
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--
+	what is moodly meter?
+-->
+<div class="container-fluid moodly-meter">
+	<div class="row">
+		<div class="col-lg-12 holder">
+			<div class="container">
+				<div class="row centered">
+					<h1>&{'moodly_meter_title'}</h1>
+				</div>
+				<div class="row">
+					<div class="col-lg-6">
+					<p>
+						#{samuel3/}
+					</p>
+					</div>
+					<div class="col-lg-6">
+					<p>
+						#{samuel1/}
+					</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--
+	moodly api?
+<div class="container-fluid about-moodly">
+	<div class="row">
+		<div class="col-lg-12 gray holder">
+			<div class="container">
+				<div class="row centered">
+					<h1>&{'about_moodly_api_title'}</h1>
+				</div>
+				<div class="row">
+					<div class="col-lg-4">
+						<h1>&{'moodly_rest_title'}</h1>
+						<hr/>
+						<p>
+							<code>
+								GET		/measurements/percentages.json
+							</code>
+						</p>
+					</div>
+					<div class="col-lg-4">
+						<h1>&{'moodly_websocket_title'}</h1>
+						<hr/>
+						<p>
+							<code>
+							WS     	/socket
+							</code>
+							<pre data-bind="foreach: { data: socketDataShortened(), as: 's'}">
+								<code class="json" data-bind="text: s, highlight: true"></code>
+							</pre>
+						</p>
+					</div>
+					<div class="col-lg-4">
+						<h1>&{'moodly_download_data_title'}</h1>
+						<hr/>
+						<p>
+							<code>
+								GET		/measurements/percentages.xls
+							</code>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+-->
+<!--
+	footer 
+-->
+<div class="container-fluid footer">
+	<div class="row">
+		<div class="col-lg-4 col-offset-4 holder centered">
+			<hr/>
+			<h4>&{'contact'}</h4>
+			<address><a href="mailto:info@moodly.nl">info@moodly.nl</a></address>
+			<h4>&{'together_with'}</h4>
+			<p>
+				Rotterdam open data
+			</p>
+			<p>
+				Gemeente Rotterdam
+			</p>
+			<p>
+				Creating 010
+			</p>
+			<p>
+				Erik van Wesel
+			</p>
+			<p>
+				JP Wesselink
+			</p>
+		</div>
+	</div>
 </div>
 #{form action: @Application.vote(), id:'f'}
 <input name="value" type="hidden" id="h">
@@ -393,3 +233,5 @@ def m = [
 </div>
 
 #{/form}
+
+
