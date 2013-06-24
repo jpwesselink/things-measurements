@@ -2,6 +2,7 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
     var IOT;
     
     IOT = {
+    	socket : null,
         data : {
             locations : []
         },
@@ -75,7 +76,8 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
            
             ko.applyBindings(this.viewModel);
             this.determineGeo();
-            if(!this.initSocket()){
+            this.socket = this.initSocket();
+            if(!this.socket){
                 this.initPolling();
             }
         },
