@@ -1,4 +1,4 @@
-define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox", "markerclusterer", "bootstrap", "waypoints-sticky", "jquery.fittext", "heatmap-gmaps", "highlight"], function($, ko, _, MarkerLabel, InfoBox, MarkerClusterer){
+define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox", "markerclusterer", "heatmap-gmaps", "bootstrap"], function($, ko, _, MarkerLabel, InfoBox, MarkerClusterer){
     var IOT;
     
     IOT = {
