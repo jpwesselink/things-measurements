@@ -81,8 +81,7 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
         },
         initMap : function(){
             var mapOptions = {
-            		scrollwheel: false,	
-            		
+            	scrollwheel: false,	
         		draggable: false,
                 center: new google.maps.LatLng(-34.397, 150.644),
                 zoom: 18,
