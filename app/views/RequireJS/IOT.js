@@ -73,18 +73,12 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             this.createMarkers();
             this.initMap();
            
-            this.initWaypoints();
             ko.applyBindings(this.viewModel);
             this.determineGeo();
             if(!this.initSocket()){
                 this.initPolling();
             }
         },
-        
-        initWaypoints: function(){
-        },
-        
-        
         initMap : function(){
             var mapOptions = {
             		scrollwheel: false,	
