@@ -6,18 +6,20 @@ import flexjson.JSONSerializer;
 import flexjson.transformer.MapTransformer;
 
 public class Serializers {
-	
 	public static final JSONSerializer locationSerializer;
 	public static final JSONSerializer locationEventSerializer;
 	public static final JSONSerializer measurementSerializer;
 	public static final JSONSerializer measurementCompactSerializer;
 	public static final JSONSerializer percentagesSerializer;
 	public static final JSONSerializer measurementDeepSerializer;
+	public static final JSONSerializer eventSerializer;
 	
 
 	static {
 		boolean prettyPrint = Play.mode == Mode.DEV;
 		
+		eventSerializer = new JSONSerializer().include(
+				).exclude("*.class").prettyPrint(prettyPrint);
 		locationSerializer = new JSONSerializer().include(
 				"id",
 				"name",

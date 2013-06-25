@@ -12,6 +12,7 @@ import javax.persistence.PrePersist;
 
 import org.hibernate.annotations.Index;
 
+import play.data.validation.Required;
 import play.db.jpa.Model;
 
 @Entity
@@ -19,22 +20,25 @@ public class Measurement extends Model {
 	
 	@ManyToOne
 	@Index(name = "location_index")
+	
     public Location location;
 	@Index(name = "created_at_index")
-	public Date createdAt;
+	@Required
+	public Date createdAt = new Date();
 	
 	@Column(nullable = false)
+	@Required
 	public Integer value;
 	
+	@Required
 	public double lat;
+	
+	@Required
 	public double lng;
-	
-	
 	
 	public String toString(){
 		return (location != null?location.slug:"no location") + " " + (value != null ? value.toString() : "null [" + id.toString() + "]");
 	}
-	
 	
 	
 	@PrePersist

@@ -1,9 +1,9 @@
 #{extends 'main.html'/}
 #{set 'moreScripts'}
+#{i18n/}
 <script type="text/javascript" src="@{'/public/scripts/require.js'}"></script>
 <script type="text/javascript" src="@{RequireJS.config()}"></script>
 <script type="text/javascript" src="@{RequireJS.main()}"></script>
-#{i18n/}
 #{/}
 
 <div class="container-fluid">
@@ -40,11 +40,20 @@
 		-->
 		<div class="col-12 col-sm-2 col-lg-2 col-push-10 col-sm-push-clear votes-span">
 			<!-- ko if: hasGeoEnabled() -->
+			<!-- ko if: canVote() -->
 			<div class="votes" data-bind="foreach: { data: moods, as: 'mood'}">
 				<div class="vote col-lg-12 col-sm-12 col-3" data-bind="css : 'mood-' + mood">
 					<i class="icon icon-huge" data-bind="css : 'icon-mood-'+mood, click : function(){ $root.vote($index())}"></i>
 				</div>
 			</div>
+			<!-- /ko -->
+			<!-- ko if: !canVote() -->
+			<div class="thanks">
+			<h3>&{'thanks_for_your_vote_title'}</h3>
+			<p>&{'thanks_for_your_vote'}</p>
+			</div>
+			<!-- /ko -->
+			
 			<!-- /ko -->
 			<!-- ko if: !hasGeoEnabled() -->
 			<p>&{'geo.disabled_explanation'}</p>

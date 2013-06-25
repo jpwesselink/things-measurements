@@ -1,10 +1,13 @@
-define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox", "markerclusterer", "heatmap-gmaps", "bootstrap"], function($, ko, _, MarkerLabel, InfoBox, MarkerClusterer){
+define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox", "markerclusterer", "ko.mapping", "heatmap-gmaps", "bootstrap"], function($, ko, _, MarkerLabel, InfoBox, MarkerClusterer, mapping){
     var IOT;
     
     IOT = {
     	socket : null,
         data : {
             locations : []
+        },
+        defaults : {
+        	COOKIE_PREFIX: "IOT"
         },
         actions : {},
         markerImages : {
@@ -23,10 +26,13 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
         viewModel : {
         	socketData : ko.observableArray(),
         	hasGeoEnabled : ko.observable(false),
+        	lastMeasurement : ko.observable(),
+        	measurements : ko.observableArray(),
             lat : ko.observable(),
             lng: ko.observable(),
             value : ko.observable(),
-            votedAt : ko.observable(),
+            now : ko.observable(),
+            lastVote : ko.observable(),
             percentages : ko.observableDictionary({0:0,1:0,2:0,3:0}),
             moods : ko.observableArray(['devastated', 'general-sadness', 'pretty-happy', 'happiness-bordering-to-incontinence']),
             types : ko.observableArray(['danger', 'info', 'success', 'warning']),
@@ -48,6 +54,25 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             }
         },
         init : function (options) {
+        	
+        	var that = this;
+        	
+        	this.viewModel.lastVoteDate = ko.computed(function(){
+        		if(this.lastVote()){
+        			return new Date(this.lastVote());
+        		}
+        	}, this.viewModel);
+        	
+        	this.viewModel.canVote = ko.computed(function(){
+        		if(!this.lastVote()){
+        			return true;
+        		}
+    			if(this.lastVoteDate() && this.now()){
+    				var future = that.defaults.timeDelta + this.lastVote() + that.defaults.votesGap * 1000;
+        			return future < new Date().getTime();
+    			}
+        		return false;
+        	}, this.viewModel);
         	this.viewModel.widthPercentages = ko.computed(function(){
         		var widthPercentages = this.percentages.values();
         		var cumulative = 0;
@@ -65,6 +90,16 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
         		return this.socketData().reverse().slice(0, 3);
         		
         	}, this.viewModel);
+        	_.extend(this.defaults, options.defaults);
+        	_.each(options.viewModelDefaults, function (v, k){
+        		if(that.viewModel[k]){
+        			that.viewModel[k](v);
+        		}
+        	});
+        	setInterval(function(){
+        		that.viewModel.now(new Date());
+        	}, 1000);
+        	
             if(options.data.locations){
                 this.data.locations = options.data.locations;
             }
@@ -76,6 +111,11 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
            
             ko.applyBindings(this.viewModel);
             this.determineGeo();
+            
+            
+            if(this.defaults.lastMeasurement){
+            	this.parseLatLng(this.defaults.lastMeasurement);
+            }
             this.socket = this.initSocket();
             if(!this.socket){
                 this.initPolling();
@@ -182,19 +222,26 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             socket.onmessage = function(response) {
             	IOT.viewModel.socketData.push(response.data);
                 var socketEvent = $.parseJSON(response.data);
-                switch(socketEvent["class"]){
-                    case "models.Feed$Vote":
-                        that.parsePercentages(socketEvent.percentages);
-                        if(socketEvent.measurement){
-                            that.parseLatLng(socketEvent.measurement);
-                        }
-                    break;
-                    case "models.Feed$LocationEvent":
-                        
-                    break;
-                    case "models.Measurement":
-                        that.parseLatLng(socketEvent);
-                    break;
+               // console.log("OMG", socketEvent);
+                if(socketEvent.meta){
+                	if(socketEvent.meta.sessionCookie){
+                		$.cookie(that.defaults.COOKIE_PREFIX + "_SESSION", decodeURIComponent(socketEvent.meta.sessionCookie));
+                	}
+                	
+	                switch(socketEvent.meta.type){
+	                    case "vote":
+	                    	IOT.viewModel.lastVote(socketEvent.meta.timestamp);
+	                        if(socketEvent.measurement){
+	                        }
+	                    break;
+	                    case "error":
+	                    	console.log(socketEvent);
+	                	break;
+	                   
+	                    case "measurement":
+	                        that.parseLatLng(socketEvent.measurement);
+	                    break;
+	                }
                 }
                
             }
@@ -213,39 +260,16 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             }
             return socket;
         },
+        
         parseLatLng : function (measurement){
-            
             if(measurement){
+            	this.viewModel.measurements.unshift(mapping.fromJS(measurement));
+            	
                 var location;
                 if(this.currentMarker){
                     this.currentMarker.setMap(null);
                 }
-                if(measurement.location != undefined){
-                    location = new google.maps.LatLng(measurement.location.lat, measurement.location.lng);
-                    this.viewModel.locations.set(measurement.location.slug, measurement.location);
-                    this.viewModel.locationPercentages.set(measurement.location.slug, measurement.location.percentages);
-                    
-                    /*
-                     * 
-                    var icon = this.markers.location;
-                    var infowindow = new InfoBox({
-                        content: "contentString",
-                        boxClass: "info-box",
-                        pixelOffset: new google.maps.Size(0, -100),
-                        
-                        infoBoxClearance: new google.maps.Size(10, 10),
-                        isHidden: false,
-                        pane: "floatPane",
-                        enableEventPropagation: false
-                    });
-                    this.currentMarker = new google.maps.Marker({
-                        position: location,
-                        map: map
-                    });
-                    
-                    infowindow.open(map, this.currentMarker);
-                     */
-                } else if(measurement.lat && measurement.lng) {
+                if(measurement.lat && measurement.lng) {
                     location = new google.maps.LatLng(measurement.lat, measurement.lng);
                     var icon = this.markers.smileys[measurement.value];
                     
@@ -310,20 +334,35 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
                 }
             });
         },
-        vote : function (v){
-            var that = this;
-            $.ajax({
-                url: this.actions.Application.vote({
-                    value: v+"",
-                    lng: that.viewModel.lng() + "",
-                    lat: that.viewModel.lat() + ""
-                }),
-                type : "POST"
-            }).fail(function(){
-                
-            }).done(function(data, textStatus, jqXHR){
-                that.viewModel.value(v);
-            });
+        socketSendJSON : function (payload) {
+        	return this.socket.send(JSON.stringify(_.extend( payload, { sessionCookie: encodeURIComponent($.cookie(this.defaults.COOKIE_PREFIX + "_SESSION")) })));
+        },
+        vote : function (voteValue){
+        	if(this.socket){
+        		var that = this;
+        		this.socketSendJSON({
+        			command: "vote",
+        			data : {
+	        			value : voteValue,
+	        			lng: that.viewModel.lng() + "",
+	                    lat: that.viewModel.lat() + ""
+        			}
+        		});
+        	} else {
+	            var that = this;
+	            $.ajax({
+	                url: this.actions.Application.vote({
+	                    value: v+"",
+	                    lng: that.viewModel.lng() + "",
+	                    lat: that.viewModel.lat() + ""
+	                }),
+	                type : "POST"
+	            }).fail(function(){
+	                
+	            }).done(function(data, textStatus, jqXHR){
+	                that.viewModel.value(v);
+	            });
+        	}
         }
     };
     

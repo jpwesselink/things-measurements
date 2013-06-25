@@ -3,16 +3,21 @@ requirejs.config({
     paths : {
         "jquery" : "jquery-1.8.1",
         "jquery.fittext" : "jquery/jquery.fittext",
+        "jquery.timeago" : "jquery/jquery.timeago",
+        "jquery.timeago.settings.strings" : "jquery/jquery.timeago.settings.strings",
+        "jquery.cookie" : "jquery/jquery.cookie",
+        "jquery.geolocation" : "jquery/jquery.geolocation",
+        "jquery.peity" : "jquery/jquery.peity",
         "heatmap" : "heatmap/heatmap",
         "heatmap-gmaps" : "heatmap/heatmap-gmaps",
         "highlight" : "highlight.pack",
         "waypoints" : "jquery/waypoints",
         "waypoints-sticky" : "jquery/waypoints-sticky",
-        "jquery.geolocation" : "jquery/jquery.geolocation",
-        "jquery.peity" : "jquery/jquery.peity",
+        "ko.mapping" : "ko/knockout.mapping-latest",
         "ko.observableDictionary" : "ko/ko.observableDictionary",
         "ko.underscoreTemplateEngine" : "ko/ko.underscoreTemplateEngine",
         "ko.bindingHandlers.peity" : "ko/ko.bindingHandlers.peity",
+        "ko.bindingHandlers.timeagogo" : "ko/ko.bindingHandlers.timeagogo",
         "ko.bindingHandlers.highlight" : "ko/ko.bindingHandlers.highlight",
         "ko.bindingHandlers.mapMarker" : "ko/ko.bindingHandlers.mapMarker",
         "knockout" : "knockout-2.2.1",
@@ -32,20 +37,30 @@ requirejs.config({
         "bootstrap-button" : "/js/bootstrap-button",
         "bootstrap-collapse" : "/js/bootstrap-collapse",
         "bootstrap-carousel" : "/js/bootstrap-carousel",
-        "bootstrap-typeahead" : "/js/bootstrap-typeahead"
+        "bootstrap-typeahead" : "/js/bootstrap-typeahead",
+        "underscore-string": "underscore/underscore.string"
     },
     shim : {
         "underscore" : {
           exports : "_"  
         },
+        "underscore-string" : {
+        	deps: ["underscore"]
+        },
         "knockout" : {
             deps: ["jquery"]
+        },
+        "ko.mapping" : {
+        	deps: ["knockout"]
         },
         "ko.underscoreTemplateEngine" : {
             deps : ["knockout", "underscore"]
         },
+        "ko.bindingHandlers.timeagogo" : {
+        	deps : ["knockout", "jquery.timeago", "jquery.timeago.settings.strings"]
+        },
         "ko.bindingHandlers.highlight" : {
-        	deps : ["highlight"]
+        	deps : ["knockout", "highlight"]
         },
         "ko.bindingHandlers.peity" : {
             deps : ["knockout", "jquery.peity", "underscore"]
@@ -62,9 +77,15 @@ requirejs.config({
         "waypoints-sticky" : {
         	deps: ["waypoints"]
         },
+        "jquery.timeago" : {
+            deps: ["jquery"]
+        },
+        "jquery.timeago.settings.strings" : {
+        	deps: ["jquery.timeago"]
+        },
         "jquery.geolocation" : {
-            deps: ["jquery"],
-            exports : "jQuery.geolocation"
+        	deps: ["jquery"],
+        	exports : "jQuery.geolocation"
         },
     	"jquery.fittext" : {
     		deps: ["jquery"],
@@ -144,7 +165,7 @@ requirejs.config({
             deps : ["jquery"]
         },
         "IOT" : {
-            deps : ["domReady", "jquery", "knockout", "ko.observableDictionary", "ko.underscoreTemplateEngine",  "ko.bindingHandlers.mapMarker", "ko.bindingHandlers.highlight", "ko.bindingHandlers.peity", "markerwithlabel", "markerclusterer", "infobox", "jquery.geolocation", "waypoints-sticky", "jquery.fittext", "highlight"]
+            deps : ["domReady", "jquery", "knockout", "ko.mapping", "underscore-string", "ko.observableDictionary", "ko.underscoreTemplateEngine",  "ko.bindingHandlers.mapMarker", "ko.bindingHandlers.highlight", "ko.bindingHandlers.peity", "markerwithlabel", "markerclusterer", "infobox", "jquery.geolocation", "waypoints-sticky", "jquery.fittext", "jquery.cookie", "ko.bindingHandlers.timeagogo", "highlight"],
         }
     }
 }); 
