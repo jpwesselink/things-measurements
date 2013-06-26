@@ -17,7 +17,7 @@
 		</div>
 	</div>
 </div>
-
+<!-- ko if: ready() -->
 <!-- ko if: !hasGeoEnabled() -->
 <div class="container-fluid">
 	<div class="row">
@@ -30,6 +30,7 @@
 	</div>
 </div>
 <!-- /ko -->
+<!-- /ko -->
 <!--
 	map, voting and percentage bar
 -->
@@ -39,24 +40,29 @@
 			votes 
 		-->
 		<div class="col-12 col-sm-2 col-lg-2 col-push-10 col-sm-push-clear votes-span">
-			<!-- ko if: hasGeoEnabled() -->
-			<!-- ko if: canVote() -->
-			<div class="votes" data-bind="foreach: { data: moods, as: 'mood'}">
-				<div class="vote col-lg-12 col-sm-12 col-3" data-bind="css : 'mood-' + mood">
-					<i class="icon icon-huge" data-bind="css : 'icon-mood-'+mood, click : function(){ $root.vote($index())}"></i>
+			<!-- ko if: ready() -->
+				<!-- ko if: hasGeoEnabled() -->
+					<!-- ko if: canVote() -->
+					<div class="votes" data-bind="foreach: { data: moods, as: 'mood'}">
+						<div class="vote col-lg-12 col-sm-12 col-3" data-bind="css : 'mood-' + mood">
+							<i class="icon icon-huge" data-bind="css : 'icon-mood-'+mood, click : function(){ $root.vote($index())}"></i>
+						</div>
+					</div>
+					<!-- /ko -->
+				<!-- ko if: !canVote() -->
+				<div class="thanks">
+				<h3>&{'thanks_for_your_vote_title'}</h3>
+				<p>&{'thanks_for_your_vote'}</p>
 				</div>
-			</div>
+				<!-- /ko -->
+				
+				<!-- /ko -->
+				<!-- ko if: !hasGeoEnabled() -->
+				<p>&{'geo.disabled_explanation'}</p>
+				<!-- /ko -->
 			<!-- /ko -->
-			<!-- ko if: !canVote() -->
-			<div class="thanks">
-			<h3>&{'thanks_for_your_vote_title'}</h3>
-			<p>&{'thanks_for_your_vote'}</p>
-			</div>
-			<!-- /ko -->
-			
-			<!-- /ko -->
-			<!-- ko if: !hasGeoEnabled() -->
-			<p>&{'geo.disabled_explanation'}</p>
+			<!-- ko if: !ready() -->
+			&{'loading'}
 			<!-- /ko -->
 		</div>
 		<!-- 
