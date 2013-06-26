@@ -24,6 +24,7 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
         },
         timeoutId : null,
         viewModel : {
+        	ready : ko.observable(false),
         	socketData : ko.observableArray(),
         	hasGeoEnabled : ko.observable(false),
         	lastMeasurement : ko.observable(),
@@ -326,12 +327,16 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             var that = this;
             $.geolocation.get({
                 success : function(geoLocation) {
+                	console.log("woot");
                     that.viewModel.lat(geoLocation.coords.latitude);
                     that.viewModel.lng(geoLocation.coords.longitude);
                     that.viewModel.hasGeoEnabled(true);
+                    that.viewModel.ready(true);
                 },
                 error : function() {
+                	console.log("no woot");
                 	that.viewModel.hasGeoEnabled(false);
+                	that.viewModel.ready(true);
                 }
             });
         },
