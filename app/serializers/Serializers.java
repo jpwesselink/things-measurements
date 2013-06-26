@@ -55,7 +55,7 @@ public class Serializers {
 				"lat"
 				).exclude("*").prettyPrint(false);
 		
-		percentagesSerializer = new JSONSerializer().exclude("geoLocation", "*.id", "*.entityId").prettyPrint(prettyPrint);
+		percentagesSerializer = new JSONSerializer().include("lng", "lat", "value", "createdAt").exclude("*").prettyPrint(prettyPrint);
 		
 		measurementDeepSerializer = new JSONSerializer().include(
 				"id",
