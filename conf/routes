@@ -4,7 +4,6 @@
 
 # Home page
 GET		/scripts/requireConfig.js					RequireJS.config
-GET		/scripts/IOT.js								RequireJS.IOT
 GET		/scripts/main.js							RequireJS.main
 
 *      	/                							module:secure
