@@ -13,6 +13,7 @@ public class Serializers {
 	public static final JSONSerializer percentagesSerializer;
 	public static final JSONSerializer measurementDeepSerializer;
 	public static final JSONSerializer eventSerializer;
+	public static final JSONSerializer measurementEventSerializer;
 	
 
 	static {
@@ -20,6 +21,9 @@ public class Serializers {
 		
 		eventSerializer = new JSONSerializer().include(
 				).exclude("*.class").prettyPrint(prettyPrint);
+		
+		measurementEventSerializer = new JSONSerializer().include(
+				).exclude("*.class", "measurement.location.measurements.*").prettyPrint(prettyPrint);
 		locationSerializer = new JSONSerializer().include(
 				"id",
 				"name",

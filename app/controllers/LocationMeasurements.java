@@ -22,7 +22,7 @@ public class LocationMeasurements extends Controller {
 		measurement.value = params.get("value", Integer.class);
 		measurement.save();
 		
-		Feed feed = Feed.get();
+		//Feed feed = Feed.get();
     	//feed.chatEvents.publish(new Vote());
     	//feed.chatEvents.publish(new Feed.LocationEvent(location, Feed.LocationEvent.EventType.NEW_MEASUREMENT));
 		if(request.format.equals("json")){
