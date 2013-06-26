@@ -3,6 +3,7 @@ package controllers;
 import models.Feed;
 import models.Location;
 import models.Measurement;
+import models.events.MeasurementEvent;
 import models.events.Vote;
 import play.mvc.Controller;
 import play.mvc.Router;
@@ -18,13 +19,14 @@ public class LocationMeasurements extends Controller {
 			badRequest();
 		}
 		Measurement measurement = new Measurement();
-		measurement.location = location;
+		measurement.lng = location.lng;
+		measurement.lat = location.lat;
 		measurement.value = params.get("value", Integer.class);
 		measurement.save();
 		
 		//Feed feed = Feed.get();
     	//feed.chatEvents.publish(new Vote());
-    	//feed.chatEvents.publish(new Feed.LocationEvent(location, Feed.LocationEvent.EventType.NEW_MEASUREMENT));
+		Feed.get().chatEvents.publish(new MeasurementEvent(measurement, Measurement.getPercentages()));
 		if(request.format.equals("json")){
 			renderJSON(Serializers.measurementDeepSerializer.serialize(measurement));
 			
