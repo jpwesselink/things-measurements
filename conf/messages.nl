@@ -10,14 +10,6 @@ crud.delete_all_measurements_confirm=Delete all measurements?
 internet_of_things=Internet of things
 how_do_you_feel=And how do feel today?
 choose_one=Let go, tell us.
-label.sentiment.0=
-
-label.sentiment.1=
-
-label.sentiment.2=
-
-label.sentiment.3=
-
 description.sentiment.0=Totaal ongelukkig
 description.sentiment.1=Niet blij
 description.sentiment.2=Blij

@@ -203,9 +203,9 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             $.each(this.markerImages.smileys, function (index, markerImage){
                 that.markers.smileys.push(
                     new google.maps.MarkerImage(markerImage,
-                       new google.maps.Size(49, 32),
+                       new google.maps.Size(100, 100),
                        new google.maps.Point(0,0),
-                       new google.maps.Point(0, 32)
+                       new google.maps.Point(0, 100)
                    )
                )
             });
@@ -279,7 +279,6 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
                         position: location,
                         map: map,
                         icon: icon,
-                        labelContent: i18n('label.sentiment.' + measurement.value),
                         labelAnchor: new google.maps.Point(0, 0),
                         labelClass: 'marker-label'
                     });
