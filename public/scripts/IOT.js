@@ -233,14 +233,13 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
 	                switch(socketEvent.meta.type){
 	                    case "vote":
 	                    	IOT.viewModel.lastVote(socketEvent.meta.timestamp);
-	                        if(socketEvent.measurement){
-	                        }
 	                    break;
 	                    case "error":
 	                    	console.log(socketEvent);
 	                	break;
 	                   
 	                    case "measurement":
+	                    	that.parsePercentages(socketEvent.percentages);
 	                        that.parseLatLng(socketEvent.measurement);
 	                    break;
 	                }
