@@ -95,8 +95,8 @@ public class MeasurementsFeed extends Controller {
                         										measurement.save();
                         										//session.put("someid", measurement.id);
                         										session.put("lastVote", new DateTime().toString());
-                        										outbound.send(serializers.Serializers.percentagesSerializer.serialize(new Vote()));
                         										room.chatEvents.publish(new MeasurementEvent(measurement, Measurement.getPercentages()));
+                        										outbound.send(serializers.Serializers.eventSerializer.serialize(new Vote()));
                         									} else {
                         										// is datetime?
                         										DateTime lastVote = new DateTime(session.get("lastVote"));
