@@ -69,6 +69,7 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
         		}
     			if(this.lastVoteDate() && this.now()){
     				var future = that.defaults.timeDelta + this.lastVote() + that.defaults.votesGap * 1000;
+    				console.log({canVote: future < new Date().getTime(), timeDelta: that.defaults.timeDelta, lastVote: this.lastVote(), votesGap: that.defaults.votesGap * 1000, future : future, now : new Date().getTime()});
         			return future < new Date().getTime();
     			}
         		return false;
