@@ -19,6 +19,7 @@ public class LocationMeasurements extends Controller {
 			badRequest();
 		}
 		Measurement measurement = new Measurement();
+		measurement.location = location;
 		measurement.lng = location.lng;
 		measurement.lat = location.lat;
 		measurement.value = params.get("value", Integer.class);
