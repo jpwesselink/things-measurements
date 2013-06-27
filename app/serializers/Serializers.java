@@ -50,6 +50,8 @@ public class Serializers {
 		measurementSerializer = new JSONSerializer().include(
 				"id",
 				"value",
+				"lng",
+				"lat",
 				"createdAt"
 		).exclude("*").prettyPrint(prettyPrint);
 		
