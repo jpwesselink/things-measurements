@@ -115,9 +115,6 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             this.determineGeo();
             
             
-            if(this.defaults.lastMeasurement){
-            	this.parseLatLng(this.defaults.lastMeasurement);
-            }
             this.socket = this.initSocket();
             if(!this.socket){
                 this.initPolling();
@@ -192,8 +189,14 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             var markerClusterer = new MarkerClusterer(map);
             this.viewModel.map = map;
             this.viewModel.markerClusterer = markerClusterer;
-            
+            var virgin = false;
             google.maps.event.addListener(map, "bounds_changed", function() {
+            	if(!virgin){
+            		virgin = true;
+            		if(that.defaults.lastMeasurement){
+            			that.parseLatLng({ measurement : that.defaults.lastMeasurement });
+                    }
+            	}
             	var bounds = map.getBounds();
         	});
         },
@@ -325,14 +328,12 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             var that = this;
             $.geolocation.get({
                 success : function(geoLocation) {
-                	console.log("woot");
                     that.viewModel.lat(geoLocation.coords.latitude);
                     that.viewModel.lng(geoLocation.coords.longitude);
                     that.viewModel.hasGeoEnabled(true);
                     that.viewModel.ready(true);
                 },
                 error : function() {
-                	console.log("no woot");
                 	that.viewModel.hasGeoEnabled(false);
                 	that.viewModel.ready(true);
                 }
