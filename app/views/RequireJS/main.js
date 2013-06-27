@@ -4,7 +4,7 @@ require(["IOT"], function(IOT) {
     		COOKIE_PREFIX : "${play.configuration.get('application.session.cookie')}",
     		timeDelta : new Date().getTime() - ${System.currentTimeMillis()},
     		votesGap : ${play.configuration.get('votes.gap.seconds', 28800)},
-    		lastMeasurement: ${models.Measurement.all().first().serializeWith('measurementSerializer').raw()}
+    		lastMeasurement: ${models.Measurement.find("order by id desc").first().serializeWith('measurementSerializer').raw()}
     	},
     	viewModelDefaults : {
     		lastVote : ${lastVote?:0}

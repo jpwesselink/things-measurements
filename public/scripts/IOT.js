@@ -195,7 +195,7 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             	if(!virgin){
             		virgin = true;
             		if(that.defaults.lastMeasurement){
-            			that.parseLatLng({ measurement : that.defaults.lastMeasurement });
+            			that.parseLatLng( that.defaults.lastMeasurement );
                     }
             	}
             	var bounds = map.getBounds();
@@ -228,7 +228,6 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             socket.onmessage = function(response) {
             	IOT.viewModel.socketData.push(response.data);
                 var socketEvent = $.parseJSON(response.data);
-               // console.log("OMG", socketEvent);
                 if(socketEvent.meta){
                 	if(socketEvent.meta.sessionCookie){
                 		$.cookie(that.defaults.COOKIE_PREFIX + "_SESSION", decodeURIComponent(socketEvent.meta.sessionCookie));
