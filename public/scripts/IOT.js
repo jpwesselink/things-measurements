@@ -190,6 +190,7 @@ define("IOT", ["jquery", "knockout", "underscore", "markerwithlabel", "infobox",
             this.viewModel.map = map;
             this.viewModel.markerClusterer = markerClusterer;
             var virgin = false;
+            var that = this;
             google.maps.event.addListener(map, "bounds_changed", function() {
             	if(!virgin){
             		virgin = true;
